@@ -1,0 +1,53 @@
+version: '2'
+services:
+  # Maria DB, depended on by all services
+  db:
+    image: mariadb
+    restart: unless-stopped
+    volumes:
+      - /data/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=neonorb
+    links:
+      - httpd
+      - tomcat
+  # HTTP portion to proxy and serve TomCat
+  httpd:
+    build: httpd/.
+    restart: unless-stopped
+    volumes:
+      - /data/www/:/var/www/
+    ports:
+      - "80:80"
+      - "443:443"
+  tomcat:
+    build: tomcat/.
+    restart: unless-stopped
+    volumes:
+      - /data/tomcat/webapps/:/var/lib/tomcat8/webapps/
+      - /data/tomcat/conf/:/usr/local/tomcat/conf/
+    ports:
+      - "8888:8080"
+  # TODO email section.
+  # postfix:
+  #   build: postfix/.
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ""
+  #   ports:
+  #     - "587:587"
+  #   links:
+  #     - db
+  #   depends_on:
+  #     - db
+  # dovecot:
+  #   build: dovecot/.
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ""
+  #   ports:
+  #     - "143:143"
+  #   links:
+  #     - postfix
+  #   depends_on:
+  #     - postfix
