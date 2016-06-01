@@ -1,0 +1,6 @@
+#Thu, 14 Apr 2016 12:46:41 -0400
+
+grails.env=production
+info.app.version=0.1
+info.app.grailsVersion=3.1.4
+info.app.name=website

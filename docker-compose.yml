@@ -1,53 +1,30 @@
 version: '2'
 services:
-  # Maria DB, depended on by all services
+# MariaDB, Database depended on by all services.
   db:
-    image: mariadb
-    restart: unless-stopped
+    image: mariadb:10.1
     volumes:
-      - /data/mysql/:/var/lib/mysql/
+      - ./mariadb/conf.d:/etc/mysql/conf.d
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
     links:
-      - httpd
-      - tomcat
-  # HTTP portion to proxy and serve TomCat
+      - httpd:httpd1
+      - tomcat:tomcat1
+# HTTP portion to proxy and serve Tomcat.
   httpd:
-    build: httpd/.
-    restart: unless-stopped
+    image: httpd:2.4
     volumes:
-      - /data/www/:/var/www/
+      - ./httpd/www/:/var/www/
     ports:
       - "80:80"
       - "443:443"
+# Chris's weird choice of web stack - Tomcat.
   tomcat:
-    build: tomcat/.
-    restart: unless-stopped
+    image: tomcat:8.0
     volumes:
-      - /data/tomcat/webapps/:/var/lib/tomcat8/webapps/
-      - /data/tomcat/conf/:/usr/local/tomcat/conf/
+      - ./tomcat/ROOT.war:/user/local/tomcat/webapps/ROOT.war
+      - ./tomcat/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./tomcat/ROOT:/usr/local/tomcat/webapps/ROOT
+      - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
     ports:
       - "8888:8080"
-  # TODO email section.
-  # postfix:
-  #   build: postfix/.
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ""
-  #   ports:
-  #     - "587:587"
-  #   links:
-  #     - db
-  #   depends_on:
-  #     - db
-  # dovecot:
-  #   build: dovecot/.
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ""
-  #   ports:
-  #     - "143:143"
-  #   links:
-  #     - postfix
-  #   depends_on:
-  #     - postfix

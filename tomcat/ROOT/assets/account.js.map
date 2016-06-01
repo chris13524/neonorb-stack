@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"account.js",
+"lineCount":2,
+"mappings":"A;AAAAA,GAAAC,WAAA,CAAe,SAAf,CAA0B,CAAC,QAAD,CAAW,QAAQ,CAACC,CAAD,CAAS,CACrDA,CAAAC,SAAA,CAAkBC,kBAAA,EAClBF,EAAAG,aAAA,CAAsBC,eAAA,EAF+B,CAA5B,CAA1B;",
+"sources":["account.unminified.js"],
+"names":["app","controller","$scope","username","getCurrentUsername","currentEmail","getCurrentEmail"]
+}
