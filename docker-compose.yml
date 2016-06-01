@@ -4,39 +4,41 @@ services:
   db:
     image: mariadb:10.1
     volumes:
-      - ./mariadb/conf.d:/etc/mysql/conf.d
+      - ./mariadb/conf.d:/etc/mysql/conf.d:rw
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
-    links:
-      - httpd:httpd1
-      - tomcat:tomcat1
 # phpMyAdmin for database administration.
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=database
+      - PMA_HOST=database1
       - PMA_USER=root
       - PMA_PASSWORD=neonorb
     ports:
       - 8080:80
     links:
-      - db:database
+      - db:database1
 # HTTP portion to proxy and serve Tomcat.
   httpd:
     image: httpd:2.4
     volumes:
-      - ./httpd/www/:/var/www/
+      - ./httpd/www/:/var/www/:rw
     ports:
       - "80:80"
       - "443:443"
+    links:
+      - db:database1
+      - tomcat:tomcat1
 # Chris's weird choice of web stack - Tomcat.
   tomcat:
-    image: tomcat:8.0
+    image: tomcat:8.0-jre8
     volumes:
-      - ./tomcat/ROOT.war:/user/local/tomcat/webapps/ROOT.war
-      - ./tomcat/server.xml:/usr/local/tomcat/conf/server.xml
-      - ./tomcat/ROOT:/usr/local/tomcat/webapps/ROOT
-      - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/ROOT.war:/usr/local/tomcat/webapps/neonorb.war:rw
+      - ./tomcat/ROOT/:/usr/local/tomcat/webapps/ROOT/:rw
+      - ./tomcat/server.xml:/usr/local/tomcat/conf/server.xml:rw
+      - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml:rw
     ports:
       - "8888:8080"
+    links:
+      - db:database1
