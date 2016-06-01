@@ -10,6 +10,18 @@ services:
     links:
       - httpd:httpd1
       - tomcat:tomcat1
+# phpMyAdmin for database administration.
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=database
+      - PMA_USER=root
+      - PMA_PASSWORD=neonorb
+    ports:
+      - 8080:80
+    links:
+      - db:database
 # HTTP portion to proxy and serve Tomcat.
   httpd:
     image: httpd:2.4
