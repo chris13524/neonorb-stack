@@ -25,8 +25,8 @@ services:
     volumes:
       - ./httpd/www/:/var/www/:rw
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     links:
       - db:database1
       - tomcat:tomcat1
@@ -34,11 +34,11 @@ services:
   tomcat:
     image: tomcat:8.0-jre8
     volumes:
-      - ./tomcat/ROOT.war:/usr/local/tomcat/webapps/neonorb.war:rw
-      - ./tomcat/ROOT/:/usr/local/tomcat/webapps/ROOT/:rw
+      - ./tomcat/web.xml:/usr/local/tomcat/conf/web.xml:rw
       - ./tomcat/server.xml:/usr/local/tomcat/conf/server.xml:rw
       - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml:rw
+      - ./tomcat/ROOT.war:/usr/local/tomcat/webapps/ROOT.war:rw
     ports:
-      - "8888:8080"
+      - 8888:8080
     links:
       - db:database1
