@@ -3,8 +3,6 @@ services:
 # MariaDB, Database depended on by all services.
   db:
     image: mariadb:10.1
-    volumes:
-      - ./mariadb/conf.d:/etc/mysql/conf.d:rw
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
 # phpMyAdmin for database administration.
@@ -32,12 +30,10 @@ services:
       - tomcat:tomcat1
 # Chris's weird choice of web stack - Tomcat.
   tomcat:
-    image: tomcat:8.0-jre8
+    image: tomcat:8.5.2-jre8
     volumes:
-      - ./tomcat/web.xml:/usr/local/tomcat/conf/web.xml:rw
-      - ./tomcat/server.xml:/usr/local/tomcat/conf/server.xml:rw
-      - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml:rw
-      - ./tomcat/ROOT.war:/usr/local/tomcat/webapps/ROOT.war:rw
+      - ./tomcat/conf:/usr/local/tomcat/conf:rw
+      - ./tomcat/webapps:/usr/local/tomcat/webapps:rw
     ports:
       - 8888:8080
     links:
