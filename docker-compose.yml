@@ -34,6 +34,7 @@ services:
     volumes:
       - ./tomcat/conf:/usr/local/tomcat/conf:rw
       - ./tomcat/webapps:/usr/local/tomcat/webapps:rw
+      - ./tomcat/website-config.yml:/website-config.yml:rw
     ports:
       - 8888:8080
     links:
