@@ -33,4 +33,7 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
+    <Resources cacheMaxSize="102400">
+        
+    </Resources>
 </Context>
