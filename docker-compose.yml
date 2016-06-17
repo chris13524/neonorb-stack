@@ -6,6 +6,9 @@ services:
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
+    volumes:
+      - ./db/data/:/var/lib/mysql/:rw
+      - ./db/conf/:/etc/mysql/:ro
     ports:
       - 3306:3306
 
@@ -24,11 +27,28 @@ services:
     links:
       - db:database1
 
+# Bugzilla
+  bugzilla:
+    image: achild/bugzilla:latest
+    environment:
+      - MYSQL_DB=bugs
+      - MYSQL_USER=bugs
+      - MYSQL_PWD=yB*39266n6Ehu=K_70d036Yrf^!L387H^3Qba37E13xYIxb73n05e91IXOWrn112%B.+y+VV5E60F=N5hdT0~H-s21AM0207RU0S
+    depends_on:
+      - db
+    ports:
+      - 8880:80
+    links:
+      - db:database1
+
 # HTTP portion to proxy and serve Tomcat.
   httpd:
     image: httpd:2.4
+    environment:
+      - DOMAIN_NAME=new.neonorb.com
     volumes:
-      - ./httpd/www/:/var/www/:rw
+      - ./httpd/www/:/usr/local/apache2/htdocs/:ro
+      - ./httpd/conf/:/usr/local/apache2/conf/:ro
     ports:
       - 80:80
       - 443:443
@@ -42,9 +62,9 @@ services:
   tomcat:
     image: tomcat:8.5.2-jre8
     volumes:
-      - ./tomcat/conf:/usr/local/tomcat/conf:rw
+      - ./tomcat/conf:/usr/local/tomcat/conf:ro
       - ./tomcat/webapps:/usr/local/tomcat/webapps:rw
-      - ./tomcat/website-config.yml:/website-config.yml:rw
+      - ./tomcat/website-config.yml:/website-config.yml:ro
     ports:
       - 8888:8080
     depends_on:
