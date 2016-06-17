@@ -1,10 +1,12 @@
 version: '2'
 services:
+
 # MariaDB, Database depended on by all services.
   db:
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
+
 # phpMyAdmin for database administration.
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -17,6 +19,7 @@ services:
       - 8080:80
     links:
       - db:database1
+
 # HTTP portion to proxy and serve Tomcat.
   httpd:
     image: httpd:2.4
@@ -28,6 +31,7 @@ services:
     links:
       - db:database1
       - tomcat:tomcat1
+
 # Chris's weird choice of web stack - Tomcat.
   tomcat:
     image: tomcat:8.5.2-jre8
