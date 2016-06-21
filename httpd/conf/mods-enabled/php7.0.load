@@ -1,2 +1,0 @@
-# Conflicts: php5
-LoadModule php7_module /usr/local/apache2/modules/libphp7.0.so

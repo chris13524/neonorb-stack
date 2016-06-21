@@ -9,7 +9,7 @@ environments:
             username: root
             password: neonorb
             dbCreate: update
-            url: jdbc:mysql://database1/website?serverTimezone=UTC&useSSL=false
+            url: jdbc:mysql://database/website?serverTimezone=UTC&useSSL=false
             properties:
                 jmxEnabled: true
                 initialSize: 5

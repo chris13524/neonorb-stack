@@ -2,72 +2,71 @@ version: '2'
 services:
 
 # MariaDB, Database depended on by all services.
-  db:
+  database:
+    restart: unless-stopped
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=neonorb
     volumes:
-      - ./db/data/:/var/lib/mysql/:rw
-      - ./db/conf/:/etc/mysql/:ro
-    ports:
-      - 3306:3306
+      - ./database/data/:/var/lib/mysql/:rw
 
 # phpMyAdmin for database administration.
   phpmyadmin:
+    restart: unless-stopped
     image: phpmyadmin/phpmyadmin:latest
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=database1
+      - PMA_HOST=database
       - PMA_USER=root
       - PMA_PASSWORD=neonorb
     depends_on:
-      - db
-    ports:
-      - 8080:80
+      - database
     links:
-      - db:database1
+      - database:database
 
 # Bugzilla
   bugzilla:
-    image: achild/bugzilla:latest
-    environment:
-      - MYSQL_DB=bugs
-      - MYSQL_USER=bugs
-      - MYSQL_PWD=yB*39266n6Ehu=K_70d036Yrf^!L387H^3Qba37E13xYIxb73n05e91IXOWrn112%B.+y+VV5E60F=N5hdT0~H-s21AM0207RU0S
+    restart: unless-stopped
+    image: neonorb/bugzilla:latest
+    volumes:
+      - ./bugzilla/localconfig:/var/www/html/localconfig:rw
+      - ./bugzilla/data:/var/www/html/data:rw
     depends_on:
-      - db
-    ports:
-      - 8880:80
+      - database
     links:
-      - db:database1
+      - database:database
+
+# Chris's weird choice of web stack - Tomcat.
+  tomcat:
+    restart: unless-stopped
+    image: tomcat:8.5.2-jre8
+    volumes:
+      - ./tomcat/conf:/usr/local/tomcat/conf:ro
+      - ./tomcat/webapps:/usr/local/tomcat/webapps:rw
+      - ./tomcat/website-config.yml:/website-config.yml:ro
+    depends_on:
+      - database
+    links:
+      - database:database
 
 # HTTP portion to proxy and serve Tomcat.
   httpd:
+    restart: unless-stopped
     image: httpd:2.4
     environment:
       - DOMAIN_NAME=new.neonorb.com
     volumes:
       - ./httpd/www/:/usr/local/apache2/htdocs/:ro
       - ./httpd/conf/:/usr/local/apache2/conf/:ro
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
     ports:
       - 80:80
       - 443:443
     depends_on:
+      - phpmyadmin
+      - bugzilla
       - tomcat
     links:
-      - db:database1
-      - tomcat:tomcat1
-
-# Chris's weird choice of web stack - Tomcat.
-  tomcat:
-    image: tomcat:8.5.2-jre8
-    volumes:
-      - ./tomcat/conf:/usr/local/tomcat/conf:ro
-      - ./tomcat/webapps:/usr/local/tomcat/webapps:rw
-      - ./tomcat/website-config.yml:/website-config.yml:ro
-    ports:
-      - 8888:8080
-    depends_on:
-      - db
-    links:
-      - db:database1
+      - tomcat:tomcat
+      - phpmyadmin:phpmyadmin
+      - bugzilla:bugzilla
