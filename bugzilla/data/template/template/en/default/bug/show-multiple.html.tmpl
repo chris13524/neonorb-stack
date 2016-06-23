@@ -119,21 +119,15 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'rightcell' => sub {
+        'row' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 365 "template/en/default/bug/show-multiple.html.tmpl"
-        if ($stash->get('rightcells')) {
-#line 334 "template/en/default/bug/show-multiple.html.tmpl"
-        $stash->set('name', $stash->get(['rightcells', 0, 'shift', 0]));
-#line 364 "template/en/default/bug/show-multiple.html.tmpl"
-        if ($stash->get('name') eq 'cc') {
-        $output .=  "\n      <th class=\"rightcell\">";
-#line 336 "template/en/default/bug/show-multiple.html.tmpl"
+        $output .=  "\n  <tr>\n    <th>";
+#line 303 "template/en/default/bug/show-multiple.html.tmpl"
         
         # FILTER
         $output .=  do {
@@ -141,72 +135,19 @@ Template::Document->new({
             my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['field_descs', 0, 'cc', 0]);
+        $output .=  $stash->get(['field_descs', 0, $stash->get('cell'), 0]);
             
             &$_tt_filter($output);
         };
         
-        $output .=  ":</th>\n      <td>";
-#line 340 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, 'cc', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'c'} = $_tt_value;
-#line 339 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('c');
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-#line 339 "template/en/default/bug/show-multiple.html.tmpl"
-        if (! $stash->get(['loop', 0, 'last', 0])) {
-        $output .=  ', ';
+        $output .=  ":</th>\n    <td";
+#line 304 "template/en/default/bug/show-multiple.html.tmpl"
+        if ($stash->get('fullrow')) {
+        $output .=  ' colspan=3';
         }
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
         
-        }
-        elsif ($stash->get('name') eq 'reporter' || $stash->get('name') eq 'assigned_to' || $stash->get('name') eq 'qa_contact') {
-        $output .=  "\n      <th class=\"rightcell\">";
-#line 343 "template/en/default/bug/show-multiple.html.tmpl"
+        $output .=  ">";
+#line 304 "template/en/default/bug/show-multiple.html.tmpl"
         
         # FILTER
         $output .=  do {
@@ -214,194 +155,20 @@ Template::Document->new({
             my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ":</th>\n      <td>";
-#line 344 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, $stash->get('name'), 0, 'identity', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
+        $output .=  $stash->get(['display_value', [ $stash->get('cell'), $stash->get(['bug', 0, $stash->get('cell'), 0]) ]]);
             
             &$_tt_filter($output);
         };
         
         $output .=  "</td>";
-        }
-        elsif ($stash->get('name') eq 'flags') {
-        $output .=  "\n        <th class=\"rightcell\">Flags:</th>\n        <td>";
-#line 356 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, 'flag_types', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'type'} = $_tt_value;
-#line 355 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['type', 0, 'flags', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR2:   while (! $_tt_error) {
-                    $stash->{'flag'} = $_tt_value;
-#line 350 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'setter', 0, 'nick', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ":\n                ";
-#line 351 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('no_break')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'type', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-#line 351 "template/en/default/bug/show-multiple.html.tmpl"
-        $output .=  $stash->get(['flag', 0, 'status', 0]);
-        $output .=  "\n                ";
-#line 354 "template/en/default/bug/show-multiple.html.tmpl"
-        if ($stash->get(['flag', 0, 'status', 0]) eq '?' && $stash->get(['flag', 0, 'requestee', 0])) {
-        $output .=  "\n                  (";
-#line 353 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'requestee', 0, 'nick', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ")";
+#line 305 "template/en/default/bug/show-multiple.html.tmpl"
+        if (! $stash->get('fullrow')) {
+        $output .=  $context->process('rightcell');
         }
         
-        $output .=  "<br>";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-        $output .=  "\n        </td>";
-        }
-        elsif ($stash->get('name') ne '') {
-        $output .=  "\n      <th class=\"rightcell\">";
-#line 359 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ":</th>\n      <td>";
-#line 360 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ $stash->get('name'), $stash->get(['bug', 0, $stash->get('name'), 0]) ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</td>";
-        }
-        else {
-        $output .=  "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
-        }
-        
-        }
-        
+        $output .=  "\n  </tr>";
+#line 307 "template/en/default/bug/show-multiple.html.tmpl"
+        $stash->set('fullrow', 0);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -1400,64 +1167,6 @@ Template::Document->new({
         
             return $output;
         },
-        'row' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <tr>\n    <th>";
-#line 303 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['field_descs', 0, $stash->get('cell'), 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ":</th>\n    <td";
-#line 304 "template/en/default/bug/show-multiple.html.tmpl"
-        if ($stash->get('fullrow')) {
-        $output .=  ' colspan=3';
-        }
-        
-        $output .=  ">";
-#line 304 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ $stash->get('cell'), $stash->get(['bug', 0, $stash->get('cell'), 0]) ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</td>";
-#line 305 "template/en/default/bug/show-multiple.html.tmpl"
-        if (! $stash->get('fullrow')) {
-        $output .=  $context->process('rightcell');
-        }
-        
-        $output .=  "\n  </tr>";
-#line 307 "template/en/default/bug/show-multiple.html.tmpl"
-        $stash->set('fullrow', 0);
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'dependencies' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1543,6 +1252,297 @@ Template::Document->new({
 #line 324 "template/en/default/bug/show-multiple.html.tmpl"
         $output .=  $context->process('rightcell');
         $output .=  "\n  </tr>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'rightcell' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 365 "template/en/default/bug/show-multiple.html.tmpl"
+        if ($stash->get('rightcells')) {
+#line 334 "template/en/default/bug/show-multiple.html.tmpl"
+        $stash->set('name', $stash->get(['rightcells', 0, 'shift', 0]));
+#line 364 "template/en/default/bug/show-multiple.html.tmpl"
+        if ($stash->get('name') eq 'cc') {
+        $output .=  "\n      <th class=\"rightcell\">";
+#line 336 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['field_descs', 0, 'cc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ":</th>\n      <td>";
+#line 340 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['bug', 0, 'cc', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'c'} = $_tt_value;
+#line 339 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('c');
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+#line 339 "template/en/default/bug/show-multiple.html.tmpl"
+        if (! $stash->get(['loop', 0, 'last', 0])) {
+        $output .=  ', ';
+        }
+        ;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        }
+        elsif ($stash->get('name') eq 'reporter' || $stash->get('name') eq 'assigned_to' || $stash->get('name') eq 'qa_contact') {
+        $output .=  "\n      <th class=\"rightcell\">";
+#line 343 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ":</th>\n      <td>";
+#line 344 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, $stash->get('name'), 0, 'identity', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</td>";
+        }
+        elsif ($stash->get('name') eq 'flags') {
+        $output .=  "\n        <th class=\"rightcell\">Flags:</th>\n        <td>";
+#line 356 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['bug', 0, 'flag_types', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'type'} = $_tt_value;
+#line 355 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['type', 0, 'flags', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR2:   while (! $_tt_error) {
+                    $stash->{'flag'} = $_tt_value;
+#line 350 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'setter', 0, 'nick', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ":\n                ";
+#line 351 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('no_break')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'type', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+#line 351 "template/en/default/bug/show-multiple.html.tmpl"
+        $output .=  $stash->get(['flag', 0, 'status', 0]);
+        $output .=  "\n                ";
+#line 354 "template/en/default/bug/show-multiple.html.tmpl"
+        if ($stash->get(['flag', 0, 'status', 0]) eq '?' && $stash->get(['flag', 0, 'requestee', 0])) {
+        $output .=  "\n                  (";
+#line 353 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'requestee', 0, 'nick', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ")";
+        }
+        
+        $output .=  "<br>";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        ;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n        </td>";
+        }
+        elsif ($stash->get('name') ne '') {
+        $output .=  "\n      <th class=\"rightcell\">";
+#line 359 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ":</th>\n      <td>";
+#line 360 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['display_value', [ $stash->get('name'), $stash->get(['bug', 0, $stash->get('name'), 0]) ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</td>";
+        }
+        else {
+        $output .=  "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
+        }
+        
+        }
+        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

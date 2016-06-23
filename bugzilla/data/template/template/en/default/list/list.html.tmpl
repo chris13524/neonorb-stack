@@ -986,97 +986,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'num_results' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <span class=\"bz_result_count\">";
-#line 340 "template/en/default/list/list.html.tmpl"
-        if ($stash->get(['bugs', 0, 'size', 0]) eq 0) {
-        $output .=  "\n      <span class=\"zero_results\">";
-#line 328 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'zeroSearchResults', 0]);
-        $output .=  ".</span>";
-        }
-        elsif ($stash->get('default_limited') && $stash->get(['bugs', 0, 'size', 0]) >= $stash->get(['Param', [ 'default_search_limit' ]])) {
-        $output .=  "\n      This result was limited to ";
-#line 330 "template/en/default/list/list.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['Param', [ 'default_search_limit' ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\n      ";
-#line 331 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  ".\n      <a href=\"buglist.cgi?";
-#line 332 "template/en/default/list/list.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('urlquerypart');
-            
-            &$_tt_filter($output);
-        };
-        
-#line 1 "template/en/default/list/list.html.tmpl"
-        if ($stash->get('order')) {
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  ("&order=" . $stash->get('qorder'));
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "&limit=0\">See\n        all search results for this query</a>.";
-#line 335 "template/en/default/list/list.html.tmpl"
-        $stash->set('time_summary_limited', 1);
-        }
-        elsif ($stash->get(['bugs', 0, 'size', 0]) eq 1) {
-        $output .=  "\n      One ";
-#line 337 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " found.";
-        }
-        else {
-#line 339 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['bugs', 0, 'size', 0]);
-        $output .=  " ";
-#line 339 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  " found.";
-        }
-        
-        $output .=  "\n  </span>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'enter_bug_link' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1175,6 +1084,97 @@ Template::Document->new({
         
         }
         
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'num_results' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <span class=\"bz_result_count\">";
+#line 340 "template/en/default/list/list.html.tmpl"
+        if ($stash->get(['bugs', 0, 'size', 0]) eq 0) {
+        $output .=  "\n      <span class=\"zero_results\">";
+#line 328 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'zeroSearchResults', 0]);
+        $output .=  ".</span>";
+        }
+        elsif ($stash->get('default_limited') && $stash->get(['bugs', 0, 'size', 0]) >= $stash->get(['Param', [ 'default_search_limit' ]])) {
+        $output .=  "\n      This result was limited to ";
+#line 330 "template/en/default/list/list.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['Param', [ 'default_search_limit' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\n      ";
+#line 331 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  ".\n      <a href=\"buglist.cgi?";
+#line 332 "template/en/default/list/list.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('urlquerypart');
+            
+            &$_tt_filter($output);
+        };
+        
+#line 1 "template/en/default/list/list.html.tmpl"
+        if ($stash->get('order')) {
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  ("&order=" . $stash->get('qorder'));
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "&limit=0\">See\n        all search results for this query</a>.";
+#line 335 "template/en/default/list/list.html.tmpl"
+        $stash->set('time_summary_limited', 1);
+        }
+        elsif ($stash->get(['bugs', 0, 'size', 0]) eq 1) {
+        $output .=  "\n      One ";
+#line 337 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " found.";
+        }
+        else {
+#line 339 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['bugs', 0, 'size', 0]);
+        $output .=  " ";
+#line 339 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  " found.";
+        }
+        
+        $output .=  "\n  </span>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

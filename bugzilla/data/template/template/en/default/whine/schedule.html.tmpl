@@ -489,21 +489,21 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'time_field' => sub {
+        'day_field' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n<select name=\"time_";
-#line 389 "template/en/default/whine/schedule.html.tmpl"
+        $output .=  "\n  <select name=\"day_";
+#line 331 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['schedule', 0, 'id', 0]);
-        $output .=  "\">\n";
-#line 391 "template/en/default/whine/schedule.html.tmpl"
-        $stash->set('options', [ [ '0', 'at midnight' ], [ '1', 'at 01:00' ], [ '2', 'at 02:00' ], [ '3', 'at 03:00' ], [ '4', 'at 04:00' ], [ '5', 'at 05:00' ], [ '6', 'at 06:00' ], [ '7', 'at 07:00' ], [ '8', 'at 08:00' ], [ '9', 'at 09:00' ], [ '10', 'at 10:00' ], [ '11', 'at 11:00' ], [ '12', 'at 12:00' ], [ '13', 'at 13:00' ], [ '14', 'at 14:00' ], [ '15', 'at 15:00' ], [ '16', 'at 16:00' ], [ '17', 'at 17:00' ], [ '18', 'at 18:00' ], [ '19', 'at 19:00' ], [ '20', 'at 20:00' ], [ '21', 'at 21:00' ], [ '22', 'at 22:00' ], [ '23', 'at 23:00' ], [ '60min', 'every hour' ], [ '30min', 'every 30 minutes' ], [ '15min', 'every 15 minutes' ] ]);
+        $output .=  "\">";
+#line 332 "template/en/default/whine/schedule.html.tmpl"
+        $stash->set('options', [ [ 'All', 'Each day' ], [ 'MF', 'Monday through Friday' ], [ 'Sun', 'Sunday' ], [ 'Mon', 'Monday' ], [ 'Tue', 'Tuesday' ], [ 'Wed', 'Wednesday' ], [ 'Thu', 'Thursday' ], [ 'Fri', 'Friday' ], [ 'Sat', 'Saturday' ], [ '1', 'On the 1st of the month' ], [ '2', 'On the 2nd of the month' ], [ '3', 'On the 3rd of the month' ], [ '4', 'On the 4th of the month' ], [ '5', 'On the 5th of the month' ], [ '6', 'On the 6th of the month' ], [ '7', 'On the 7th of the month' ], [ '8', 'On the 8th of the month' ], [ '9', 'On the 9th of the month' ], [ '10', 'On the 10th of the month' ], [ '11', 'On the 11th of the month' ], [ '12', 'On the 12th of the month' ], [ '13', 'On the 13th of the month' ], [ '14', 'On the 14th of the month' ], [ '15', 'On the 15th of the month' ], [ '16', 'On the 16th of the month' ], [ '17', 'On the 17th of the month' ], [ '18', 'On the 18th of the month' ], [ '19', 'On the 19th of the month' ], [ '20', 'On the 20th of the month' ], [ '21', 'On the 21st of the month' ], [ '22', 'On the 22nd of the month' ], [ '23', 'On the 23rd of the month' ], [ '24', 'On the 24th of the month' ], [ '25', 'On the 25th of the month' ], [ '26', 'On the 26th of the month' ], [ '27', 'On the 27th of the month' ], [ '28', 'On the 28th of the month' ], [ '29', 'On the 29th of the month' ], [ '30', 'On the 30th of the month' ], [ '31', 'On the 31st of the month' ], [ 'last', 'Last day of the month' ] ]);
         $output .=  "\n";
-#line 428 "template/en/default/whine/schedule.html.tmpl"
+#line 383 "template/en/default/whine/schedule.html.tmpl"
         
         # FOREACH 
         do {
@@ -522,16 +522,16 @@ Template::Document->new({
         FOR1:   while (! $_tt_error) {
                     $stash->{'option'} = $_tt_value;
         $output .=  "\n        <option value=\"";
-#line 424 "template/en/default/whine/schedule.html.tmpl"
+#line 379 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['option', 0, 0, 0]);
         $output .=  "\" ";
-#line 425 "template/en/default/whine/schedule.html.tmpl"
+#line 380 "template/en/default/whine/schedule.html.tmpl"
         if ($stash->get('val') eq $stash->get(['option', 0, 0, 0])) {
         $output .=  " selected";
         }
         
         $output .=  ">";
-#line 426 "template/en/default/whine/schedule.html.tmpl"
+#line 381 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['option', 0, 1, 0]);
         $output .=  "        </option>";;
                     ($_tt_value, $_tt_error) = $_tt_list->get_next();
@@ -543,7 +543,7 @@ Template::Document->new({
             die $_tt_error if $_tt_error;
         };
         
-        $output .=  "\n\n</select>\n\n";
+        $output .=  "\n\n  </select>\n";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -643,21 +643,21 @@ Template::Document->new({
         
             return $output;
         },
-        'day_field' => sub {
+        'time_field' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n  <select name=\"day_";
-#line 331 "template/en/default/whine/schedule.html.tmpl"
+        $output .=  "\n<select name=\"time_";
+#line 389 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['schedule', 0, 'id', 0]);
-        $output .=  "\">";
-#line 332 "template/en/default/whine/schedule.html.tmpl"
-        $stash->set('options', [ [ 'All', 'Each day' ], [ 'MF', 'Monday through Friday' ], [ 'Sun', 'Sunday' ], [ 'Mon', 'Monday' ], [ 'Tue', 'Tuesday' ], [ 'Wed', 'Wednesday' ], [ 'Thu', 'Thursday' ], [ 'Fri', 'Friday' ], [ 'Sat', 'Saturday' ], [ '1', 'On the 1st of the month' ], [ '2', 'On the 2nd of the month' ], [ '3', 'On the 3rd of the month' ], [ '4', 'On the 4th of the month' ], [ '5', 'On the 5th of the month' ], [ '6', 'On the 6th of the month' ], [ '7', 'On the 7th of the month' ], [ '8', 'On the 8th of the month' ], [ '9', 'On the 9th of the month' ], [ '10', 'On the 10th of the month' ], [ '11', 'On the 11th of the month' ], [ '12', 'On the 12th of the month' ], [ '13', 'On the 13th of the month' ], [ '14', 'On the 14th of the month' ], [ '15', 'On the 15th of the month' ], [ '16', 'On the 16th of the month' ], [ '17', 'On the 17th of the month' ], [ '18', 'On the 18th of the month' ], [ '19', 'On the 19th of the month' ], [ '20', 'On the 20th of the month' ], [ '21', 'On the 21st of the month' ], [ '22', 'On the 22nd of the month' ], [ '23', 'On the 23rd of the month' ], [ '24', 'On the 24th of the month' ], [ '25', 'On the 25th of the month' ], [ '26', 'On the 26th of the month' ], [ '27', 'On the 27th of the month' ], [ '28', 'On the 28th of the month' ], [ '29', 'On the 29th of the month' ], [ '30', 'On the 30th of the month' ], [ '31', 'On the 31st of the month' ], [ 'last', 'Last day of the month' ] ]);
+        $output .=  "\">\n";
+#line 391 "template/en/default/whine/schedule.html.tmpl"
+        $stash->set('options', [ [ '0', 'at midnight' ], [ '1', 'at 01:00' ], [ '2', 'at 02:00' ], [ '3', 'at 03:00' ], [ '4', 'at 04:00' ], [ '5', 'at 05:00' ], [ '6', 'at 06:00' ], [ '7', 'at 07:00' ], [ '8', 'at 08:00' ], [ '9', 'at 09:00' ], [ '10', 'at 10:00' ], [ '11', 'at 11:00' ], [ '12', 'at 12:00' ], [ '13', 'at 13:00' ], [ '14', 'at 14:00' ], [ '15', 'at 15:00' ], [ '16', 'at 16:00' ], [ '17', 'at 17:00' ], [ '18', 'at 18:00' ], [ '19', 'at 19:00' ], [ '20', 'at 20:00' ], [ '21', 'at 21:00' ], [ '22', 'at 22:00' ], [ '23', 'at 23:00' ], [ '60min', 'every hour' ], [ '30min', 'every 30 minutes' ], [ '15min', 'every 15 minutes' ] ]);
         $output .=  "\n";
-#line 383 "template/en/default/whine/schedule.html.tmpl"
+#line 428 "template/en/default/whine/schedule.html.tmpl"
         
         # FOREACH 
         do {
@@ -676,16 +676,16 @@ Template::Document->new({
         FOR1:   while (! $_tt_error) {
                     $stash->{'option'} = $_tt_value;
         $output .=  "\n        <option value=\"";
-#line 379 "template/en/default/whine/schedule.html.tmpl"
+#line 424 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['option', 0, 0, 0]);
         $output .=  "\" ";
-#line 380 "template/en/default/whine/schedule.html.tmpl"
+#line 425 "template/en/default/whine/schedule.html.tmpl"
         if ($stash->get('val') eq $stash->get(['option', 0, 0, 0])) {
         $output .=  " selected";
         }
         
         $output .=  ">";
-#line 381 "template/en/default/whine/schedule.html.tmpl"
+#line 426 "template/en/default/whine/schedule.html.tmpl"
         $output .=  $stash->get(['option', 0, 1, 0]);
         $output .=  "        </option>";;
                     ($_tt_value, $_tt_error) = $_tt_list->get_next();
@@ -697,7 +697,7 @@ Template::Document->new({
             die $_tt_error if $_tt_error;
         };
         
-        $output .=  "\n\n  </select>\n";
+        $output .=  "\n\n</select>\n\n";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

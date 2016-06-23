@@ -568,73 +568,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'columnheader' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <th colspan=\"";
-#line 117 "template/en/default/list/table.html.tmpl"
-        $output .=  $stash->get('splitheader') ? 2 : 1;
-        $output .=  "\">\n    <a href=\"buglist.cgi?";
-#line 118 "template/en/default/list/table.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('urlquerypart');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "&amp;order=";
-#line 119 "template/en/default/list/table.html.tmpl"
-        $output .=  $context->process('new_order');
-        
-        $output .=  "&amp;query_based_on=";
-#line 121 "template/en/default/list/table.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('uri')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('defaultsavename') || $stash->get('searchname');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">";
-#line 122 "template/en/default/list/table.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['abbrev', 0, $stash->get('id'), 0, 'title', 0]) || $stash->get(['field_descs', 0, $stash->get('id'), 0]) || $stash->get(['column', 0, 'title', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-#line 123 "template/en/default/list/table.html.tmpl"
-        $output .=  $context->process('order_arrow');
-        $output .=  "</a>\n  </th>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'time_summary_line' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -758,35 +691,6 @@ Template::Document->new({
         
             return $output;
         },
-        'order_arrow' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 148 "template/en/default/list/table.html.tmpl"
-        if ($stash->get(['order', 0, 'match', [ ("^" . $stash->get('id') . " DESC") ]])) {
-        $output .=  "\n    <span class=\"bz_sort_order_primary\">&#x25BC;</span>";
-        }
-        elsif ($stash->get(['order', 0, 'match', [ ("^" . $stash->get('id') . "(,\\s*|\$)") ]])) {
-        $output .=  "\n    <span class=\"bz_sort_order_primary\">&#x25B2;</span>";
-        }
-        elsif ($stash->get(['order', 0, 'match', [ ("\\b" . $stash->get('id') . " DESC") ]])) {
-        $output .=  "\n    <span class=\"bz_sort_order_secondary\">&#x25BC;</span>";
-        }
-        elsif ($stash->get(['order', 0, 'match', [ ("\\b" . $stash->get('id') . "(,\\s*|\$)") ]])) {
-        $output .=  "\n    <span class=\"bz_sort_order_secondary\">&#x25B2;</span>";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'new_order' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -840,6 +744,102 @@ Template::Document->new({
             &$_tt_filter($output);
         };
         
+        }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'columnheader' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <th colspan=\"";
+#line 117 "template/en/default/list/table.html.tmpl"
+        $output .=  $stash->get('splitheader') ? 2 : 1;
+        $output .=  "\">\n    <a href=\"buglist.cgi?";
+#line 118 "template/en/default/list/table.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('urlquerypart');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "&amp;order=";
+#line 119 "template/en/default/list/table.html.tmpl"
+        $output .=  $context->process('new_order');
+        
+        $output .=  "&amp;query_based_on=";
+#line 121 "template/en/default/list/table.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('uri')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('defaultsavename') || $stash->get('searchname');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+#line 122 "template/en/default/list/table.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['abbrev', 0, $stash->get('id'), 0, 'title', 0]) || $stash->get(['field_descs', 0, $stash->get('id'), 0]) || $stash->get(['column', 0, 'title', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+#line 123 "template/en/default/list/table.html.tmpl"
+        $output .=  $context->process('order_arrow');
+        $output .=  "</a>\n  </th>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'order_arrow' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 148 "template/en/default/list/table.html.tmpl"
+        if ($stash->get(['order', 0, 'match', [ ("^" . $stash->get('id') . " DESC") ]])) {
+        $output .=  "\n    <span class=\"bz_sort_order_primary\">&#x25BC;</span>";
+        }
+        elsif ($stash->get(['order', 0, 'match', [ ("^" . $stash->get('id') . "(,\\s*|\$)") ]])) {
+        $output .=  "\n    <span class=\"bz_sort_order_primary\">&#x25B2;</span>";
+        }
+        elsif ($stash->get(['order', 0, 'match', [ ("\\b" . $stash->get('id') . " DESC") ]])) {
+        $output .=  "\n    <span class=\"bz_sort_order_secondary\">&#x25BC;</span>";
+        }
+        elsif ($stash->get(['order', 0, 'match', [ ("\\b" . $stash->get('id') . "(,\\s*|\$)") ]])) {
+        $output .=  "\n    <span class=\"bz_sort_order_secondary\">&#x25B2;</span>";
         }
         
             } };

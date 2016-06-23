@@ -657,6 +657,167 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'section_flags' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 131 "template/en/default/bug/show.xml.tmpl"
+        if (!($stash->get(['displayfields', 0, 'flag', 0]))) {
+        $context->throw('return', '', \$output);
+        }
+        
+        $output .=  "\n  ";
+#line 143 "template/en/default/bug/show.xml.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['obj', 0, 'flags', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'flag'} = $_tt_value;
+        $output .=  "\n    <flag name=\"";
+#line 134 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'type', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n          id=\"";
+#line 135 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'id', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n          type_id=\"";
+#line 136 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'type_id', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n          status=\"";
+#line 137 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'status', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n          setter=\"";
+#line 138 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'setter', 0, 'email', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"";
+#line 141 "template/en/default/bug/show.xml.tmpl"
+        if ($stash->get(['flag', 0, 'status', 0]) eq '?' && $stash->get(['flag', 0, 'requestee', 0])) {
+        $output .=  "\n          requestee=\"";
+#line 140 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['flag', 0, 'requestee', 0, 'email', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"";
+        }
+        
+        $output .=  "\n    />";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'a_comment' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -830,167 +991,6 @@ Template::Document->new({
         };
         
         $output .=  "</thetext>\n  </long_desc>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_flags' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 131 "template/en/default/bug/show.xml.tmpl"
-        if (!($stash->get(['displayfields', 0, 'flag', 0]))) {
-        $context->throw('return', '', \$output);
-        }
-        
-        $output .=  "\n  ";
-#line 143 "template/en/default/bug/show.xml.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['obj', 0, 'flags', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'flag'} = $_tt_value;
-        $output .=  "\n    <flag name=\"";
-#line 134 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'type', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n          id=\"";
-#line 135 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'id', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n          type_id=\"";
-#line 136 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'type_id', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n          status=\"";
-#line 137 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'status', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n          setter=\"";
-#line 138 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'setter', 0, 'email', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"";
-#line 141 "template/en/default/bug/show.xml.tmpl"
-        if ($stash->get(['flag', 0, 'status', 0]) eq '?' && $stash->get(['flag', 0, 'requestee', 0])) {
-        $output .=  "\n          requestee=\"";
-#line 140 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['flag', 0, 'requestee', 0, 'email', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"";
-        }
-        
-        $output .=  "\n    />";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

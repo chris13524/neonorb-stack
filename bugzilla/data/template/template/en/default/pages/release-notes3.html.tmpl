@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'pages/release-notes3.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'pages/release-notes3.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -2277,124 +2277,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'req_table' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <table class=\"req_table\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <tr>\n      <th>Module</th> <th>Version</th>";
-#line 3454 "template/en/default/pages/release-notes3.html.tmpl"
-        if ($stash->get('include_feature')) {
-        $output .=  "\n        <th>Enables Feature</th>";
-        }
-        
-        $output .=  "\n    </tr>";
-#line 3472 "template/en/default/pages/release-notes3.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get('reqs');
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'req'} = $_tt_value;
-        $output .=  "\n      <tr>\n        <td ";
-#line 3458 "template/en/default/pages/release-notes3.html.tmpl"
-        if ($stash->get(['new', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]])) {
-        $output .=  ' class="req_new"';
-        }
-        
-        $output .=  ">";
-#line 3459 "template/en/default/pages/release-notes3.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['req', 0, 'module', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</td> \n        <td ";
-#line 3460 "template/en/default/pages/release-notes3.html.tmpl"
-        if ($stash->get(['updated', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]]) || $stash->get(['new', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]])) {
-        $output .=  ' class="req_new"';
-        }
-        
-        $output .=  ">";
-#line 3466 "template/en/default/pages/release-notes3.html.tmpl"
-        if ($stash->get(['req', 0, 'version', 0]) eq 0) {
-        $output .=  "\n            (Any)";
-        }
-        else {
-#line 3465 "template/en/default/pages/release-notes3.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['req', 0, 'version', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "\n        </td>";
-#line 3470 "template/en/default/pages/release-notes3.html.tmpl"
-        if ($stash->get('include_feature')) {
-        $output .=  " \n          <td>";
-#line 3469 "template/en/default/pages/release-notes3.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['req', 0, 'feature', 0, 'join', [ ', ' ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</td>";
-        }
-        
-        $output .=  "\n      </tr>";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-        $output .=  "\n</table>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'db_req' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -2511,6 +2393,124 @@ Template::Document->new({
         }
         
         $output .=  "</li>\n  </ul>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'req_table' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <table class=\"req_table\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <tr>\n      <th>Module</th> <th>Version</th>";
+#line 3454 "template/en/default/pages/release-notes3.html.tmpl"
+        if ($stash->get('include_feature')) {
+        $output .=  "\n        <th>Enables Feature</th>";
+        }
+        
+        $output .=  "\n    </tr>";
+#line 3472 "template/en/default/pages/release-notes3.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get('reqs');
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'req'} = $_tt_value;
+        $output .=  "\n      <tr>\n        <td ";
+#line 3458 "template/en/default/pages/release-notes3.html.tmpl"
+        if ($stash->get(['new', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]])) {
+        $output .=  ' class="req_new"';
+        }
+        
+        $output .=  ">";
+#line 3459 "template/en/default/pages/release-notes3.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['req', 0, 'module', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</td> \n        <td ";
+#line 3460 "template/en/default/pages/release-notes3.html.tmpl"
+        if ($stash->get(['updated', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]]) || $stash->get(['new', 0, 'contains', [ $stash->get(['req', 0, 'package', 0]) ]])) {
+        $output .=  ' class="req_new"';
+        }
+        
+        $output .=  ">";
+#line 3466 "template/en/default/pages/release-notes3.html.tmpl"
+        if ($stash->get(['req', 0, 'version', 0]) eq 0) {
+        $output .=  "\n            (Any)";
+        }
+        else {
+#line 3465 "template/en/default/pages/release-notes3.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['req', 0, 'version', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "\n        </td>";
+#line 3470 "template/en/default/pages/release-notes3.html.tmpl"
+        if ($stash->get('include_feature')) {
+        $output .=  " \n          <td>";
+#line 3469 "template/en/default/pages/release-notes3.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['req', 0, 'feature', 0, 'join', [ ', ' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</td>";
+        }
+        
+        $output .=  "\n      </tr>";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n</table>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

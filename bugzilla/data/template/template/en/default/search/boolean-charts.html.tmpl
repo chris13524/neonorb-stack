@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'search/boolean-charts.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'search/boolean-charts.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -100,68 +100,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'any_all_select' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <div class=\"any_all_select\">\n    <select name=\"";
-#line 170 "template/en/default/search/boolean-charts.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('name');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" id=\"";
-#line 170 "template/en/default/search/boolean-charts.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('name');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n            onchange=\"fix_query_string(this)\">\n      <option value=\"AND\">Match ALL of the following separately:</option>\n      <option value=\"OR\" ";
-#line 173 "template/en/default/search/boolean-charts.html.tmpl"
-        if ($stash->get('selected') eq 'OR') {
-        $output .=  ' selected="selected"';
-        }
-        
-        $output .=  ">\n        Match ANY of the following separately:</option>\n      <option value=\"AND_G\" ";
-#line 175 "template/en/default/search/boolean-charts.html.tmpl"
-        if ($stash->get('selected') eq 'AND_G') {
-        $output .=  ' selected';
-        }
-        
-        $output .=  ">\n        Match ALL of the following against the same field:</option>\n    </select>";
-#line 183 "template/en/default/search/boolean-charts.html.tmpl"
-        if ($stash->get('with_advanced_link')) {
-        $output .=  "\n      <a id=\"custom_search_advanced_controller\"\n         href=\"javascript:TUI_toggle_class('custom_search_advanced')\">\n        Hide Advanced Features\n      </a>";
-        }
-        
-        $output .=  "\n  </div>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'one_condition' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -511,6 +449,68 @@ Template::Document->new({
         $output .=  "\n  </div>\n  ";
 #line 165 "template/en/default/search/boolean-charts.html.tmpl"
         $stash->set('previous_condition', $stash->get('condition'));
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'any_all_select' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <div class=\"any_all_select\">\n    <select name=\"";
+#line 170 "template/en/default/search/boolean-charts.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('name');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" id=\"";
+#line 170 "template/en/default/search/boolean-charts.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('name');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n            onchange=\"fix_query_string(this)\">\n      <option value=\"AND\">Match ALL of the following separately:</option>\n      <option value=\"OR\" ";
+#line 173 "template/en/default/search/boolean-charts.html.tmpl"
+        if ($stash->get('selected') eq 'OR') {
+        $output .=  ' selected="selected"';
+        }
+        
+        $output .=  ">\n        Match ANY of the following separately:</option>\n      <option value=\"AND_G\" ";
+#line 175 "template/en/default/search/boolean-charts.html.tmpl"
+        if ($stash->get('selected') eq 'AND_G') {
+        $output .=  ' selected';
+        }
+        
+        $output .=  ">\n        Match ALL of the following against the same field:</option>\n    </select>";
+#line 183 "template/en/default/search/boolean-charts.html.tmpl"
+        if ($stash->get('with_advanced_link')) {
+        $output .=  "\n      <a id=\"custom_search_advanced_controller\"\n         href=\"javascript:TUI_toggle_class('custom_search_advanced')\">\n        Hide Advanced Features\n      </a>";
+        }
+        
+        $output .=  "\n  </div>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

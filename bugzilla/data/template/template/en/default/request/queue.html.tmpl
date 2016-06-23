@@ -536,45 +536,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'display_requester' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 250 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'requester', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'display_requestee' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -642,21 +603,23 @@ Template::Document->new({
         
             return $output;
         },
-        'display_buglist' => sub {
+        'display_attachment' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n  </table>";
-#line 259 "template/en/default/request/queue.html.tmpl"
-        if (!($stash->get(['buglist', 0, 'keys', 0, 'size', 0]))) {
-        next ;
-        }
-        
-        $output .=  "\n  <a href=\"buglist.cgi?bug_id=";
-#line 261 "template/en/default/request/queue.html.tmpl"
+#line 242 "template/en/default/request/queue.html.tmpl"
+        if ($stash->get(['request', 0, 'attach_id', 0])) {
+        $output .=  "\n    <a href=\"attachment.cgi?id=";
+#line 238 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'attach_id', 0]);
+        $output .=  "&amp;action=edit\">";
+#line 239 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'attach_id', 0]);
+        $output .=  ": ";
+#line 239 "template/en/default/request/queue.html.tmpl"
         
         # FILTER
         $output .=  do {
@@ -664,84 +627,17 @@ Template::Document->new({
             my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['buglist', 0, 'keys', 0, 'nsort', 0, 'join', [ ',' ]]);
+        $output .=  $stash->get(['request', 0, 'attach_summary', 0]);
             
             &$_tt_filter($output);
         };
         
-        $output .=  "\">(view as\n  ";
-#line 262 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " list)</a>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'js_comp' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  cpts['";
-#line 40 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get('n');
-        $output .=  "'] = [";
-#line 41 "template/en/default/request/queue.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['prod', 0, 'components', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'comp'} = $_tt_value;
-        $output .=  "'";
-#line 41 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['comp', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "'";
-#line 41 "template/en/default/request/queue.html.tmpl"
-        if (!($stash->get(['loop', 0, 'last', 0]))) {
-        $output .=  ', ';
+        $output .=  "</a>";
         }
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
+        else {
+        $output .=  "\n    N/A";
+        }
         
-        $output .=  "];";
-#line 42 "template/en/default/request/queue.html.tmpl"
-        $stash->set('n', $stash->get('n') + 1);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -835,15 +731,95 @@ Template::Document->new({
         
             return $output;
         },
-        'display_status' => sub {
+        'display_created' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 227 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'status', 0]);
+#line 254 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('time')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'created', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'js_comp' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  cpts['";
+#line 40 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get('n');
+        $output .=  "'] = [";
+#line 41 "template/en/default/request/queue.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['prod', 0, 'components', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'comp'} = $_tt_value;
+        $output .=  "'";
+#line 41 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['comp', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "'";
+#line 41 "template/en/default/request/queue.html.tmpl"
+        if (!($stash->get(['loop', 0, 'last', 0]))) {
+        $output .=  ', ';
+        }
+        ;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "];";
+#line 42 "template/en/default/request/queue.html.tmpl"
+        $stash->set('n', $stash->get('n') + 1);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -894,41 +870,15 @@ Template::Document->new({
         
             return $output;
         },
-        'display_attachment' => sub {
+        'display_status' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 242 "template/en/default/request/queue.html.tmpl"
-        if ($stash->get(['request', 0, 'attach_id', 0])) {
-        $output .=  "\n    <a href=\"attachment.cgi?id=";
-#line 238 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'attach_id', 0]);
-        $output .=  "&amp;action=edit\">";
-#line 239 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'attach_id', 0]);
-        $output .=  ": ";
-#line 239 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'attach_summary', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</a>";
-        }
-        else {
-        $output .=  "\n    N/A";
-        }
-        
+#line 227 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'status', 0]);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -937,22 +887,72 @@ Template::Document->new({
         
             return $output;
         },
-        'display_created' => sub {
+        'display_buglist' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 254 "template/en/default/request/queue.html.tmpl"
+        $output .=  "\n  </table>";
+#line 259 "template/en/default/request/queue.html.tmpl"
+        if (!($stash->get(['buglist', 0, 'keys', 0, 'size', 0]))) {
+        next ;
+        }
+        
+        $output .=  "\n  <a href=\"buglist.cgi?bug_id=";
+#line 261 "template/en/default/request/queue.html.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('time')
+            my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['request', 0, 'created', 0]);
+        $output .=  $stash->get(['buglist', 0, 'keys', 0, 'nsort', 0, 'join', [ ',' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">(view as\n  ";
+#line 262 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " list)</a>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_requester' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 250 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'requester', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
             
             &$_tt_filter($output);
         };

@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'modtime' => '1422386282',
         'name' => 'bug/dependency-tree.html.tmpl',
+        'modtime' => '1422386282',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -163,303 +163,6 @@ Template::Document->new({
         };
         
         }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'tree_section' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  ";
-#line 41 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set(['global', 0, 'seen', 0], {   });
-        $output .=  "\n  ";
-        $output .=  "\n  <h3>\n    <a href=\"show_bug.cgi?id=";
-#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\">";
-#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
-        $output .=  " ";
-#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "</a> ";
-#line 59 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('type') eq 1) {
-#line 46 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('tree_name', 'dependson_tree');
-#line 51 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['ids', 0, 'size', 0])) {
-        $output .=  "\n            depends on ";
-        }
-        else {
-        $output .=  "\n            does not depend on any ";
-#line 50 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('hide_resolved')) {
-        $output .=  'open ';
-        }
-        
-#line 50 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  ".";
-        }
-        
-        }
-        elsif ($stash->get('type') eq 2) {
-#line 53 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('tree_name', 'blocked_tree');
-#line 58 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['ids', 0, 'size', 0])) {
-        $output .=  " \n            blocks ";
-        }
-        else {
-        $output .=  "\n            does not block any ";
-#line 57 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('hide_resolved')) {
-        $output .=  'open ';
-        }
-        
-#line 57 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  ".";
-        }
-        
-        }
-        
-#line 64 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['ids', 0, 'size', 0])) {
-        $output .=  "\n        ";
-#line 61 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  ($stash->get(['ids', 0, 'size', 0]) eq 1) ? 'one' : $stash->get(['ids', 0, 'size', 0]);
-        $output .=  "\n        ";
-#line 62 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('hide_resolved')) {
-        $output .=  "open";
-        }
-        
-        $output .=  "\n        ";
-#line 63 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  ($stash->get(['ids', 0, 'size', 0]) eq 1) ? $stash->get(['terms', 0, 'bug', 0]) : $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  ":";
-        }
-        
-        $output .=  " \n  </h3>";
-#line 91 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['ids', 0, 'size', 0])) {
-        $output .=  "\n    ";
-#line 68 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('use_post', ($stash->get(['ids', 0, 'join', [ ',' ], 'length', 0]) > '8000' - 27) ? 1 : 0);
-#line 72 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('use_post')) {
-        $output .=  "\n      <form action=\"buglist.cgi\" method=\"post\">\n      <input type=\"hidden\" name=\"bug_id\" value=\"";
-#line 71 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
-        $output .=  "\">";
-        }
-        
-        $output .=  "\n";
-#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('maxdepth')) {
-        $output .=  "Up to ";
-#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('maxdepth');
-        $output .=  " level";
-#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('maxdepth') > 1) {
-        $output .=  's';
-        }
-        
-        $output .=  " deep | ";
-        }
-        
-#line 86 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('use_post')) {
-        $output .=  "\n      <button>view as ";
-#line 76 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " list</button>";
-#line 79 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['user', 0, 'in_group', [ 'editbugs' ]]) && $stash->get(['ids', 0, 'size', 0]) > 1) {
-        $output .=  "\n        | <button type=\"submit\" name=\"tweak\" value=\"1\">change several</button>";
-        }
-        
-        $output .=  "\n      </form>";
-        }
-        else {
-        $output .=  "\n      <a href=\"buglist.cgi?bug_id=";
-#line 82 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
-        $output .=  "\">view as ";
-#line 82 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " list</a>";
-#line 85 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['user', 0, 'in_group', [ 'editbugs' ]]) && $stash->get(['ids', 0, 'size', 0]) > 1) {
-        $output .=  "\n        | <a href=\"buglist.cgi?bug_id=";
-#line 84 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
-        $output .=  "&amp;tweak=1\">change several</a>";
-        }
-        
-        }
-        
-        $output .=  "\n\n    <ul class=\"tree\">";
-#line 89 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $context->include('display_tree', { 'tree' => $stash->get($stash->get('tree_name')) });
-        $output .=  "\n    </ul>";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'bullet' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 130 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['tree', 0, 'dependencies', 0, $stash->get('bugid'), 0, 'size', 0]) && ! $stash->get(['global', 0, 'seen', 0, $stash->get('bugid'), 0])) {
-#line 128 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('extra_class', ' b_open');
-#line 129 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('extra_args', 'onclick="return doToggle(this, event)"');
-        $output .=  " ";
-        }
-        
-        $output .=  "\n  <a id=\"b";
-#line 131 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\" \n     class=\"b ";
-#line 132 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('extra_class');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n     title=\"Click to expand or contract this portion of the tree. Hold down the Ctrl key while clicking to expand or contract all subtrees.\"";
-#line 134 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('extra_args');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  ">&nbsp;&nbsp;</a>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'buglink' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 138 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('isclosed', ! $stash->get(['bug', 0, 'isopened', 0]));
-#line 151 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('closed', [ $stash->get('isclosed') ])
-                      || $context->throw($context->error);
-        
-        $output .=  "    <a title=\"";
-#line 140 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $context->include('buginfo', { 'bug' => $stash->get('bug') });
-        $output .=  "\"\n       href=\"show_bug.cgi?id=";
-#line 141 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\">\n      <b>";
-#line 142 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  ":</b>\n      <span class=\"summ_text\">";
-#line 143 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</span>\n      <span class=\"summ_info\">[";
-#line 144 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $context->include('buginfo');
-        $output .=  "]</span>\n    </a>\n    <a href=\"showdependencytree.cgi?id=";
-#line 146 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('uri')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('bugid');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n       class=\"tree_link\">\n      <img src=\"skins/standard/dependency-tree/tree.png\"\n           title=\"See dependency tree for ";
-#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " ";
-#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('bugid');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">\n    </a>";
-            
-            &$_tt_filter($output);
-        };
         
             } };
             if ($@) {
@@ -719,6 +422,303 @@ Template::Document->new({
         }
         
         $output .=  ">\n   </form>\n   </td>\n </tr>\n</table>\n";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'bullet' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 130 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['tree', 0, 'dependencies', 0, $stash->get('bugid'), 0, 'size', 0]) && ! $stash->get(['global', 0, 'seen', 0, $stash->get('bugid'), 0])) {
+#line 128 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('extra_class', ' b_open');
+#line 129 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('extra_args', 'onclick="return doToggle(this, event)"');
+        $output .=  " ";
+        }
+        
+        $output .=  "\n  <a id=\"b";
+#line 131 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\" \n     class=\"b ";
+#line 132 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('extra_class');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n     title=\"Click to expand or contract this portion of the tree. Hold down the Ctrl key while clicking to expand or contract all subtrees.\"";
+#line 134 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('extra_args');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  ">&nbsp;&nbsp;</a>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'tree_section' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  ";
+#line 41 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set(['global', 0, 'seen', 0], {   });
+        $output .=  "\n  ";
+        $output .=  "\n  <h3>\n    <a href=\"show_bug.cgi?id=";
+#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">";
+#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
+        $output .=  " ";
+#line 44 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "</a> ";
+#line 59 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('type') eq 1) {
+#line 46 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('tree_name', 'dependson_tree');
+#line 51 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['ids', 0, 'size', 0])) {
+        $output .=  "\n            depends on ";
+        }
+        else {
+        $output .=  "\n            does not depend on any ";
+#line 50 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('hide_resolved')) {
+        $output .=  'open ';
+        }
+        
+#line 50 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  ".";
+        }
+        
+        }
+        elsif ($stash->get('type') eq 2) {
+#line 53 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('tree_name', 'blocked_tree');
+#line 58 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['ids', 0, 'size', 0])) {
+        $output .=  " \n            blocks ";
+        }
+        else {
+        $output .=  "\n            does not block any ";
+#line 57 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('hide_resolved')) {
+        $output .=  'open ';
+        }
+        
+#line 57 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  ".";
+        }
+        
+        }
+        
+#line 64 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['ids', 0, 'size', 0])) {
+        $output .=  "\n        ";
+#line 61 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  ($stash->get(['ids', 0, 'size', 0]) eq 1) ? 'one' : $stash->get(['ids', 0, 'size', 0]);
+        $output .=  "\n        ";
+#line 62 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('hide_resolved')) {
+        $output .=  "open";
+        }
+        
+        $output .=  "\n        ";
+#line 63 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  ($stash->get(['ids', 0, 'size', 0]) eq 1) ? $stash->get(['terms', 0, 'bug', 0]) : $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  ":";
+        }
+        
+        $output .=  " \n  </h3>";
+#line 91 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['ids', 0, 'size', 0])) {
+        $output .=  "\n    ";
+#line 68 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('use_post', ($stash->get(['ids', 0, 'join', [ ',' ], 'length', 0]) > '8000' - 27) ? 1 : 0);
+#line 72 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('use_post')) {
+        $output .=  "\n      <form action=\"buglist.cgi\" method=\"post\">\n      <input type=\"hidden\" name=\"bug_id\" value=\"";
+#line 71 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
+        $output .=  "\">";
+        }
+        
+        $output .=  "\n";
+#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('maxdepth')) {
+        $output .=  "Up to ";
+#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('maxdepth');
+        $output .=  " level";
+#line 74 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('maxdepth') > 1) {
+        $output .=  's';
+        }
+        
+        $output .=  " deep | ";
+        }
+        
+#line 86 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('use_post')) {
+        $output .=  "\n      <button>view as ";
+#line 76 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " list</button>";
+#line 79 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['user', 0, 'in_group', [ 'editbugs' ]]) && $stash->get(['ids', 0, 'size', 0]) > 1) {
+        $output .=  "\n        | <button type=\"submit\" name=\"tweak\" value=\"1\">change several</button>";
+        }
+        
+        $output .=  "\n      </form>";
+        }
+        else {
+        $output .=  "\n      <a href=\"buglist.cgi?bug_id=";
+#line 82 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
+        $output .=  "\">view as ";
+#line 82 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " list</a>";
+#line 85 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['user', 0, 'in_group', [ 'editbugs' ]]) && $stash->get(['ids', 0, 'size', 0]) > 1) {
+        $output .=  "\n        | <a href=\"buglist.cgi?bug_id=";
+#line 84 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
+        $output .=  "&amp;tweak=1\">change several</a>";
+        }
+        
+        }
+        
+        $output .=  "\n\n    <ul class=\"tree\">";
+#line 89 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $context->include('display_tree', { 'tree' => $stash->get($stash->get('tree_name')) });
+        $output .=  "\n    </ul>";
+        }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'buglink' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 138 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('isclosed', ! $stash->get(['bug', 0, 'isopened', 0]));
+#line 151 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('closed', [ $stash->get('isclosed') ])
+                      || $context->throw($context->error);
+        
+        $output .=  "    <a title=\"";
+#line 140 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $context->include('buginfo', { 'bug' => $stash->get('bug') });
+        $output .=  "\"\n       href=\"show_bug.cgi?id=";
+#line 141 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">\n      <b>";
+#line 142 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  ":</b>\n      <span class=\"summ_text\">";
+#line 143 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</span>\n      <span class=\"summ_info\">[";
+#line 144 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $context->include('buginfo');
+        $output .=  "]</span>\n    </a>\n    <a href=\"showdependencytree.cgi?id=";
+#line 146 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('uri')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('bugid');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"\n       class=\"tree_link\">\n      <img src=\"skins/standard/dependency-tree/tree.png\"\n           title=\"See dependency tree for ";
+#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " ";
+#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('bugid');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">\n    </a>";
+            
+            &$_tt_filter($output);
+        };
+        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

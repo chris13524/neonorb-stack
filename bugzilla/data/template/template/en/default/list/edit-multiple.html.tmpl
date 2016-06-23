@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'modtime' => '1422386282',
         'name' => 'list/edit-multiple.html.tmpl',
+        'modtime' => '1422386282',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -474,6 +474,119 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'selectmenu' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <select id=\"";
+#line 378 "template/en/default/list/edit-multiple.html.tmpl"
+        $output .=  $stash->get('menuname');
+        $output .=  "\" name=\"";
+#line 378 "template/en/default/list/edit-multiple.html.tmpl"
+        $output .=  $stash->get('menuname');
+        $output .=  "\">\n    <option value=\"";
+#line 379 "template/en/default/list/edit-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('dontchange');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" selected=\"selected\">";
+#line 380 "template/en/default/list/edit-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('dontchange');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\n    </option>";
+#line 385 "template/en/default/list/edit-multiple.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get('menuitems');
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'menuitem'} = $_tt_value;
+#line 383 "template/en/default/list/edit-multiple.html.tmpl"
+        if ($stash->get('property')) {
+#line 383 "template/en/default/list/edit-multiple.html.tmpl"
+        $stash->set('menuitem', $stash->get(['menuitem', 0, $stash->get('property'), 0]));
+        }
+        
+        $output .=  "\n      <option value=\"";
+#line 384 "template/en/default/list/edit-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('menuitem');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+#line 384 "template/en/default/list/edit-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['display_value', [ $stash->get('menuname'), $stash->get('menuitem') ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</option>";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n  </select>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'status_section' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -745,119 +858,6 @@ Template::Document->new({
         }
         
         $output .=  "');\n    YAHOO.util.Event.onDOMReady( showHideStatusItems );\n  </script>\n";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'selectmenu' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <select id=\"";
-#line 378 "template/en/default/list/edit-multiple.html.tmpl"
-        $output .=  $stash->get('menuname');
-        $output .=  "\" name=\"";
-#line 378 "template/en/default/list/edit-multiple.html.tmpl"
-        $output .=  $stash->get('menuname');
-        $output .=  "\">\n    <option value=\"";
-#line 379 "template/en/default/list/edit-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('dontchange');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" selected=\"selected\">";
-#line 380 "template/en/default/list/edit-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('dontchange');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\n    </option>";
-#line 385 "template/en/default/list/edit-multiple.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get('menuitems');
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'menuitem'} = $_tt_value;
-#line 383 "template/en/default/list/edit-multiple.html.tmpl"
-        if ($stash->get('property')) {
-#line 383 "template/en/default/list/edit-multiple.html.tmpl"
-        $stash->set('menuitem', $stash->get(['menuitem', 0, $stash->get('property'), 0]));
-        }
-        
-        $output .=  "\n      <option value=\"";
-#line 384 "template/en/default/list/edit-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('menuitem');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">";
-#line 384 "template/en/default/list/edit-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ $stash->get('menuname'), $stash->get('menuitem') ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</option>";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-        $output .=  "\n  </select>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

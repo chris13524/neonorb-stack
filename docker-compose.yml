@@ -70,3 +70,25 @@ services:
       - tomcat:tomcat
       - phpmyadmin:phpmyadmin
       - bugzilla:bugzilla
+
+# Mail
+  mail:
+    restart: unless-stopped
+    image: neonorb/mail:latest
+    environment:
+      - DOMAIN_NAME=new.neonorb.com
+      - DB_HOST=database
+      - DB_NAME=mail
+      - DB_USER=mail
+      - DB_PASS=4_n*%fklL+L+J%Rf:8xI-.-e.=18XdwrM|*F=k=pg!nnbo3c+K4S:_vH~Tz+^|J^bRZ%c-0!6-!^*TLmz8Y%5Sa!4c4:l+O+f;PX
+      - POSTMASTER_ADDRESS=neonorb@new.neonorb.com
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+      - ./mail/mail/:/home/mailboxes/:rw
+    ports:
+      - 587:587
+      - 993:993
+    depends_on:
+      - database
+    links:
+      - database:database
