@@ -74,6 +74,7 @@ services:
 # Mail
   mail:
     restart: unless-stopped
+    build: ./mail
     image: neonorb/mail:latest
     environment:
       - DOMAIN_NAME=new.neonorb.com
