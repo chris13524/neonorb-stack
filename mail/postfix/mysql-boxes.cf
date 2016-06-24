@@ -1,0 +1,7 @@
+user=$DB_USER
+password=$DB_PASS
+dbname=$DB_NAME
+table=users
+select_field=email
+where_field=email
+hosts=$DB_HOST
