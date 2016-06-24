@@ -1,7 +1,0 @@
-user=$DB_USER
-password=$DB_PASS
-dbname=$DB_NAME
-table=aliases
-select_field=alias
-where_field=email
-hosts=$DB_HOST

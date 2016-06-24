@@ -74,8 +74,8 @@ services:
 # Mail
   mail:
     restart: unless-stopped
-    build: ./mail
-    image: neonorb/mail:latest
+    build: ../docker-mail
+#    image: neonorb/mail:latest
     environment:
       - DOMAIN_NAME=new.neonorb.com
       - DB_HOST=database
