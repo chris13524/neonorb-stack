@@ -5,7 +5,8 @@
 	<meta name="layout" content="main">
 </head>
 <body>
-<h1>Ohhhh, shit.</h1>
-<p>You just found a page that doesn't exist. That would be a 404 error dude.</p>
+<h1>ummm</h1>
+<p>dis page dont exist</p>
+<p><img src="https://wallpaperscraft.com/image/morgan_freeman_actor_black_white_gray-haired_hollywood_18914_3840x2160.jpg" width="300"/></p>
 </body>
 </html>

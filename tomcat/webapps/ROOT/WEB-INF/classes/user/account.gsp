@@ -40,18 +40,18 @@
 	<!-- general -->
 	<div class="tab-pane" id="general">
 		<g:set var="form" value="generalForm" scope="request"/>
-		<form name="${form}" ng-submit="generalSubmit()">
+		<g:form name="${form}" mapping="account">
 			<g:include view="/user/usernamefield.gsp"/>
 			
 			<!-- submit -->
 			<div class="form-group">
-				<input
-						type="submit"
+				<g:submitButton
+						name="submit"
 						class="btn btn-default btn-success"
 						value="${message(code: 'account.general.change')}"
-						ng-disabled="${form}.$invalid || ${form}.username.$pending.usernameAvailable"/>
+						ng-disabled="${form}.\$invalid || ${form}.username.\$pending.usernameAvailable"/>
 			</div>
-		</form>
+		</g:form>
 	</div>
 
 	<!-- email -->

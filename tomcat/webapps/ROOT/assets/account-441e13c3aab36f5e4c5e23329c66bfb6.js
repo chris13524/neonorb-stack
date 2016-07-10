@@ -1,0 +1,2 @@
+//# sourceMappingURL=account.js.map
+app.controller("account",["$scope","$http",function(a,b){a.username=getCurrentUsername();a.currentEmail=getCurrentEmail();a.generalSubmit=function(a){b.post("/user/account",JSON.stringify(a)).success(function(){console.log("success!")})}}]);

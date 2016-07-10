@@ -1,0 +1,148 @@
+Version 1.1.3:
+Now using new update server.
+
+Version 1.1.2:
+Crashes now write to a log.
+
+--Changes--
+Options panes now use the new switch control rather than the check box.
+
+--Fixes--
+Minor performance fixes.
+
+Version 1.1.1:
+
+--Fixes--
+Fixed crash when reconnecting serial port really fast.
+Minor performance fixes.
+Micro Wizard finish lines are now properly reset when connecting serial port.
+Fixed crash when switching from The Judge finish line.
+
+--------------------------------------------------
+Version 1.1.0:
+Added support for Micro Wizard finish lines.
+
+--Fixes--
+Issue where blank groups could be created.
+
+--------------------------------------------------
+Version 1.0.10:
+
+--Additions--
+Added car statisitics.
+
+--Fixes--
+Fixed statistics tab not showing.
+Fixed Windows executable not launching correctly.
+Fixed bug where derbys would be set to changed when loaded or newly created.
+
+--------------------------------------------------
+Version 1.0.9:
+
+--Changes--
+Autosaves are now created at the end of each heat in addition to a time interval.
+Changed the way quick races are switched to, now instead of having to stop the regular derby and start a quick race, you can simply switch to a quick race directly from a regular derby.
+Round count and schedule type are no longer saved with the derby.
+
+--Fixes--
+Fixed crash when loading derby.
+
+--------------------------------------------------
+Version 1.0.8:
+
+--Features--
+Lane statistics now show average, minimum, and maximum times.
+
+--Additions--
+Support for demo mode. When running in demo mode, only 5 cars can be added to the registration.
+
+--Fixes--
+Issue with statistic times not updating.
+Issue with the lane chart not clearing data from a previous schedule.
+Minor performance fixes.
+
+--------------------------------------------------
+Version 1.0.7:
+
+--Features--
+Added support for solenoids and light trees. These can be triggered by a "Go!" button in the management tab.
+Leaderboard tab can now be filtered by group and text.
+Statsitics tab now contains lane statisitics, a graph of all the lane times througout the derby.
+
+--Additions--
+Leaderboard tab now has a place column.
+When double clicking on a leaderboard statistic, focus is brought to the registration tab and the leaderboard statistic car.
+
+--Changes--
+When not sorting by average assending in the leaderboard tab, a warning is shown. It now sorts by average assending by default.
+Most of the options at a per-derby basis, have been moved to the global application settings. These options usually are never changed and therfore, can be reused derby-to-derby.
+Registration tab now has more preferable widths to the columns.
+
+--Fixes--
+Percent done label now hides when using a quick race.
+Issue with loading a Neon Schedule.
+Other small stability and performance fixes.
+Default group being created when loading a derby.
+Two derby finished dialogs would show.
+
+--Saftey--
+No longer crashes when loading an unrecognized property.
+
+--------------------------------------------------
+Version 1.0.6:
+Fixed random bugs with lane displaying.
+
+--------------------------------------------------
+Version 1.0.5:
+Added progress bar to show update progress.
+
+--------------------------------------------------
+Version 1.0.4:
+Random fixes and tweaks.
+
+--Features--
+Previous heats can now be rerun.
+Quick races can be switched to at any time. This replaces the Quick Race schedule type.
+
+--Additions--
+Heat timer. This is for effect purposes only.
+Added place indicators to the management tab.
+Arrow now animates pointing as well as spinning while waiting for a winner to be determined.
+Added circle indicators for derby running, finish line, and heat statuses.
+Checkered flag winner display option. Shows a checkered flag above the winner and puts numbers above the runners up indicating their place. This is now the default.
+
+--Changes--
+Heat running is now handled by Derby Pro rather than the finish line. This allows race showing results to be extended forever.
+
+--Fixes--
+Fixed bug where results would sometimes be erased after the finish line reset.
+Fixed bug whre the finish line was not being marked as disconnected when serial port is unplugged and then not reconnecting after replugging in.
+Fixed bug where the management tab would always show results from the real schedule.
+Fixed bug where statistics were not correctly calculating averages.
+Fixed issue when loading schedules with partial heats.
+
+--------------------------------------------------
+Version 1.0.3:
+Added update dialog after an update to show the changelog.
+
+--------------------------------------------------
+Version 1.0.2:
+--Features--
+Derby Management tab now shows the currently running cars.
+
+--Changes--
+Tweaked UI.
+
+--Bug fixes--
+Removed ability to sort schedule as this was unintended and caused problems.
+Fixed crash when postponing heats.
+
+--------------------------------------------------
+Version 1.0.1:
+Fixed incorrect version serving.
+
+--------------------------------------------------
+Version 1.0.0:
+Inital release.
+
+--------------------------------------------------

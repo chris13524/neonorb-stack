@@ -986,63 +986,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'enter_bug_link' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <a href=\"enter_bug.cgi";
-#line 318 "template/en/default/list/list.html.tmpl"
-        if ($stash->get(['one_product', 0, 'defined', 0])) {
-        $output .=  "?product=";
-#line 318 "template/en/default/list/list.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('uri')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['one_product', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "\">File\n    a new ";
-#line 319 "template/en/default/list/list.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-#line 322 "template/en/default/list/list.html.tmpl"
-        if ($stash->get(['one_product', 0, 'defined', 0])) {
-        $output .=  "\n     in the \"";
-#line 321 "template/en/default/list/list.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['one_product', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" product";
-        }
-        
-        $output .=  "</a>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'edit_search_url' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1175,6 +1118,63 @@ Template::Document->new({
         }
         
         $output .=  "\n  </span>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'enter_bug_link' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <a href=\"enter_bug.cgi";
+#line 318 "template/en/default/list/list.html.tmpl"
+        if ($stash->get(['one_product', 0, 'defined', 0])) {
+        $output .=  "?product=";
+#line 318 "template/en/default/list/list.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('uri')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['one_product', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "\">File\n    a new ";
+#line 319 "template/en/default/list/list.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+#line 322 "template/en/default/list/list.html.tmpl"
+        if ($stash->get(['one_product', 0, 'defined', 0])) {
+        $output .=  "\n     in the \"";
+#line 321 "template/en/default/list/list.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['one_product', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" product";
+        }
+        
+        $output .=  "</a>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

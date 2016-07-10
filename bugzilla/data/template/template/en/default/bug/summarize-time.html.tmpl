@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'bug/summarize-time.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'bug/summarize-time.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -282,24 +282,39 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'owner_report' => sub {
+        'do_one_owner' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 85 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set(['global', 0, 'total', 0], 0);
-        $stash->set(['global', 0, 'bug_count', 0], {   });
-        $stash->set(['global', 0, 'owner_count', 0], {   });
-        $output .=  "\n    <table cellpadding=\"4\" cellspacing=\"0\" width=\"90%\" class=\"realitems owner\">";
-#line 90 "template/en/default/bug/summarize-time.html.tmpl"
+#line 99 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set(['global', 0, 'owner_count', 0, $stash->get('owner'), 0], 1);
+        $output .=  "\n    <tr><td colspan=\"5\" class=\"owner_header\">\n        <b>";
+#line 101 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('owner');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</b>\n    </td></tr>";
+#line 103 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('col', 0);
+        $stash->set('subtotal', 0);
+#line 113 "template/en/default/bug/summarize-time.html.tmpl"
         
         # FOREACH 
         do {
             my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['workdata', 0, 'keys', 0, 'sort', 0]);
+            my $_tt_list = $stash->get(['ownerdata', 0, 'nsort', [ 'bug_id' ]]);
             
             unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
                 $_tt_list = Template::Config->iterator($_tt_list)
@@ -311,9 +326,23 @@ Template::Document->new({
             $stash->set('loop', $_tt_list);
             eval {
         FOR1:   while (! $_tt_error) {
-                    $stash->{'owner'} = $_tt_value;
-#line 88 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->include('do_one_owner', { 'owner' => $stash->get('owner'), 'ownerdata' => $stash->get(['workdata', 0, $stash->get('owner'), 0]), 'detailed' => $stash->get('detailed') });;
+                    $stash->{'bugdata'} = $_tt_value;
+#line 105 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('bug_id', $stash->get(['bugdata', 0, 'bug_id', 0]));
+#line 106 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->include('calc_bug_total', { 'id' => $stash->get('bug_id') });
+#line 107 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set(['global', 0, 'bug_count', 0, $stash->get('bug_id'), 0], 1);
+#line 111 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('detailed')) {
+#line 109 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->include('bug_header', { 'cid' => $stash->get('col'), 'id' => $stash->get('bug_id'), 'bugdata' => $stash->get('bugdata'), 'extra' => 1 });
+#line 110 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('col', $stash->get('col') + 1);
+        }
+        
+#line 112 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('subtotal', $stash->get('subtotal') + $stash->get(['bugdata', 0, 'total_time', 0]));;
                     ($_tt_value, $_tt_error) = $_tt_list->get_next();
                 }
             };
@@ -323,66 +352,24 @@ Template::Document->new({
             die $_tt_error if $_tt_error;
         };
         
-        $output .=  "\n";
-#line 1 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('additional', ($stash->get(['global', 0, 'owner_count', 0, 'size', 0]) . " developers \@\n                     " . $stash->get(['global', 0, 'bug_count', 0, 'size', 0]) . " " . $stash->get(['terms', 0, 'bugs', 0])));
-        $output .=  " ";
-#line 94 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->include('section_total', { 'colspan' => 3, 'additional' => $stash->get('additional') });
-        $output .=  "\n    </table>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
+        $output .=  "\n    <tr>\n      <td colspan=\"4\" align=\"right\"><b>Total</b>:</td>\n      <td align=\"right\" class=\"subtotal\" width=\"100\">\n        <b>";
+#line 117 "template/en/default/bug/summarize-time.html.tmpl"
         
-            return $output;
-        },
-        'inactive_report' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('format', [ '%.2f' ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('subtotal');
             
-            eval { BLOCK: {
-        $output .=  "\n    <h3>Inactive ";
-#line 224 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  "</h3>\n    <table cellpadding=\"4\" cellspacing=\"0\" width=\"90%\" class=\"zeroitems\">";
-#line 226 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('cid', 0);
-#line 230 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['null', 0, 'nsort', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'bug_id'} = $_tt_value;
-#line 228 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->include('bug_header', { 'id' => $stash->get('bug_id'), 'cid' => $stash->get('cid') });
-#line 229 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('cid', $stash->get('cid') + 1);;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
+            &$_tt_filter($output);
         };
         
-        $output .=  "\n    </table>";
+        $output .=  "</b></td>";
+#line 118 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set(['global', 0, 'total', 0], $stash->get(['global', 0, 'total', 0]) + $stash->get('subtotal'));
+        $output .=  "\n    </tr>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -563,159 +550,25 @@ Template::Document->new({
         
             return $output;
         },
-        'query_form' => sub {
+        'inactive_report' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n<hr noshade size=1>\n<form method=\"post\" name=\"summary\" style=\"display: inline\" action=\"summarize_time.cgi\">\n<input type=\"hidden\" name=\"do_depends\" value=\"";
-#line 259 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('do_depends');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">\n<input type=\"hidden\" name=\"id\" value=\"";
-#line 260 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">\n<input type=\"hidden\" name=\"do_report\" value=\"1\">\n";
-#line 267 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('warn_swap_dates')) {
-        $output .=  "\n    <h4 style=\"border: 1px solid red; margin: 1em; padding: 0.5em\">The\n    end date specified occurs before the start date, which doesn't\n    make sense; the dates below have therefore been swapped.</h4>";
-        }
-        
-        $output .=  "\n\n<table>\n<tr>\n<td align=\"right\">\n  <b><label accesskey=\"s\" \n             for=\"start_date\">Period <u>s</u>tarting</label></b>: \n</td><td colspan=\"3\">\n  <input type=\"text\" id=\"start_date\" name=\"start_date\" size=\"11\"\n         align=\"right\" value=\"";
-#line 276 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('start_date');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" maxlength=\"10\"\n         onchange=\"updateCalendarFromField(this)\">\n  <button type=\"button\" class=\"calendar_button\"\n    id=\"button_calendar_start_date\"\n    onclick=\"showCalendar('start_date')\"><span>Calendar</span>\n  </button>\n  <div id=\"con_calendar_start_date\"></div>\n  &nbsp;\n  <b>and <label accesskey=\"e\" for=\"end_date\"><u>e</u>nding</label></b>: \n  <input type=\"text\" name=\"end_date\" size=\"11\" id=\"end_date\"\n         align=\"right\" value =\"";
-#line 286 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('end_date');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" maxlength=\"10\"\n         onchange=\"updateCalendarFromField(this)\">\n  <button type=\"button\" class=\"calendar_button\"\n    id=\"button_calendar_end_date\"\n    onclick=\"showCalendar('end_date')\"><span>Calendar</span>\n  </button>\n  <div id=\"con_calendar_end_date\"></div>\n</td><td align=\"right\">\n  <input type=\"submit\" id=\"summarize\" value=\"Summarize\">\n</td></tr>\n<tr>\n<td>&nbsp;</td><td colspan=\"4\">\n  <small>(Dates are optional, and in YYYY-MM-DD format)</small>\n</td>\n<tr><td align=\"right\">\n  <b>Group by</b>:\n</td><td colspan=\"2\">\n  <input type=\"radio\" name=\"group_by\" id=\"number\" value=\"number\" ";
-#line 303 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('group_by') eq 'number') {
-        $output .=  'checked="checked"';
-        }
-        
-        $output .=  "><label \n  for=\"number\" accesskey=\"n\">";
-#line 306 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
-        $output .=  " <u>N</u>umber</label>\n  <input type=\"radio\" name=\"group_by\" id=\"owner\" value=\"owner\" ";
-#line 307 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('group_by') eq 'owner') {
-        $output .=  'checked="checked"';
-        }
-        
-        $output .=  "><label \n  for=\"owner\" accesskey=\"d\"><u>D</u>eveloper</label>\n</td><td colspan=\"2\">\n  <label for=\"ctype\"><b>Format</b></label>: <select name=\"ctype\" id=\"ctype\">\n    <option value=\"html\">HTML Report</option>\n  </select>\n</td></tr><tr>\n<td>&nbsp;</td><td colspan=\"4\">\n  <input type=\"checkbox\" name=\"monthly\" ";
-#line 317 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('monthly')) {
-        $output .=  'checked="checked"';
-        }
-        
-        $output .=  " id=\"monthly\">\n  <label for=\"monthly\" accesskey=\"m\">Split by <u>m</u>onth</label>\n  ";
-        $output .=  "\n  &nbsp;\n  <input type=\"checkbox\" name=\"detailed\" ";
-#line 322 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('detailed')) {
-        $output .=  'checked="checked"';
-        }
-        
-        $output .=  " id=\"detailed\">\n  <label for=\"detailed\" accesskey=\"t\">De<u>t</u>ailed summaries</label>\n  &nbsp;\n  <input type=\"checkbox\" name=\"inactive\" ";
-#line 326 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('inactive')) {
-        $output .=  'checked="checked"';
-        }
-        
-        $output .=  " id=\"inactive\">\n  <label for=\"inactive\" accesskey=\"i\">Also show <u>i</u>nactive\n  ";
-#line 329 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  "\n    <h3>Inactive ";
+#line 224 "template/en/default/bug/summarize-time.html.tmpl"
         $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  "</label>\n</td>\n</tr></table>\n\n</form>\n<script type=\"text/javascript\">\n  <!--\n    ";
-#line 336 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->process('global/calendar.js.tmpl', { 'id' => 'start_date' });
-#line 337 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->process('global/calendar.js.tmpl', { 'id' => 'end_date' });
-        $output .=  "\n    document.forms['summary'].start_date.focus();\n  //--></script>\n<hr noshade size=1>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'do_one_owner' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 99 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set(['global', 0, 'owner_count', 0, $stash->get('owner'), 0], 1);
-        $output .=  "\n    <tr><td colspan=\"5\" class=\"owner_header\">\n        <b>";
-#line 101 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('owner');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</b>\n    </td></tr>";
-#line 103 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('col', 0);
-        $stash->set('subtotal', 0);
-#line 113 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  "</h3>\n    <table cellpadding=\"4\" cellspacing=\"0\" width=\"90%\" class=\"zeroitems\">";
+#line 226 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('cid', 0);
+#line 230 "template/en/default/bug/summarize-time.html.tmpl"
         
         # FOREACH 
         do {
             my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['ownerdata', 0, 'nsort', [ 'bug_id' ]]);
+            my $_tt_list = $stash->get(['null', 0, 'nsort', 0]);
             
             unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
                 $_tt_list = Template::Config->iterator($_tt_list)
@@ -727,23 +580,11 @@ Template::Document->new({
             $stash->set('loop', $_tt_list);
             eval {
         FOR1:   while (! $_tt_error) {
-                    $stash->{'bugdata'} = $_tt_value;
-#line 105 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('bug_id', $stash->get(['bugdata', 0, 'bug_id', 0]));
-#line 106 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->include('calc_bug_total', { 'id' => $stash->get('bug_id') });
-#line 107 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set(['global', 0, 'bug_count', 0, $stash->get('bug_id'), 0], 1);
-#line 111 "template/en/default/bug/summarize-time.html.tmpl"
-        if ($stash->get('detailed')) {
-#line 109 "template/en/default/bug/summarize-time.html.tmpl"
-        $output .=  $context->include('bug_header', { 'cid' => $stash->get('col'), 'id' => $stash->get('bug_id'), 'bugdata' => $stash->get('bugdata'), 'extra' => 1 });
-#line 110 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('col', $stash->get('col') + 1);
-        }
-        
-#line 112 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set('subtotal', $stash->get('subtotal') + $stash->get(['bugdata', 0, 'total_time', 0]));;
+                    $stash->{'bug_id'} = $_tt_value;
+#line 228 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->include('bug_header', { 'id' => $stash->get('bug_id'), 'cid' => $stash->get('cid') });
+#line 229 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('cid', $stash->get('cid') + 1);;
                     ($_tt_value, $_tt_error) = $_tt_list->get_next();
                 }
             };
@@ -753,24 +594,7 @@ Template::Document->new({
             die $_tt_error if $_tt_error;
         };
         
-        $output .=  "\n    <tr>\n      <td colspan=\"4\" align=\"right\"><b>Total</b>:</td>\n      <td align=\"right\" class=\"subtotal\" width=\"100\">\n        <b>";
-#line 117 "template/en/default/bug/summarize-time.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('format', [ '%.2f' ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('subtotal');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</b></td>";
-#line 118 "template/en/default/bug/summarize-time.html.tmpl"
-        $stash->set(['global', 0, 'total', 0], $stash->get(['global', 0, 'total', 0]) + $stash->get('subtotal'));
-        $output .=  "\n    </tr>";
+        $output .=  "\n    </table>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -964,6 +788,126 @@ Template::Document->new({
         
             return $output;
         },
+        'query_form' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n<hr noshade size=1>\n<form method=\"post\" name=\"summary\" style=\"display: inline\" action=\"summarize_time.cgi\">\n<input type=\"hidden\" name=\"do_depends\" value=\"";
+#line 259 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('do_depends');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">\n<input type=\"hidden\" name=\"id\" value=\"";
+#line 260 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['ids', 0, 'join', [ ',' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">\n<input type=\"hidden\" name=\"do_report\" value=\"1\">\n";
+#line 267 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('warn_swap_dates')) {
+        $output .=  "\n    <h4 style=\"border: 1px solid red; margin: 1em; padding: 0.5em\">The\n    end date specified occurs before the start date, which doesn't\n    make sense; the dates below have therefore been swapped.</h4>";
+        }
+        
+        $output .=  "\n\n<table>\n<tr>\n<td align=\"right\">\n  <b><label accesskey=\"s\" \n             for=\"start_date\">Period <u>s</u>tarting</label></b>: \n</td><td colspan=\"3\">\n  <input type=\"text\" id=\"start_date\" name=\"start_date\" size=\"11\"\n         align=\"right\" value=\"";
+#line 276 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('start_date');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" maxlength=\"10\"\n         onchange=\"updateCalendarFromField(this)\">\n  <button type=\"button\" class=\"calendar_button\"\n    id=\"button_calendar_start_date\"\n    onclick=\"showCalendar('start_date')\"><span>Calendar</span>\n  </button>\n  <div id=\"con_calendar_start_date\"></div>\n  &nbsp;\n  <b>and <label accesskey=\"e\" for=\"end_date\"><u>e</u>nding</label></b>: \n  <input type=\"text\" name=\"end_date\" size=\"11\" id=\"end_date\"\n         align=\"right\" value =\"";
+#line 286 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('end_date');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" maxlength=\"10\"\n         onchange=\"updateCalendarFromField(this)\">\n  <button type=\"button\" class=\"calendar_button\"\n    id=\"button_calendar_end_date\"\n    onclick=\"showCalendar('end_date')\"><span>Calendar</span>\n  </button>\n  <div id=\"con_calendar_end_date\"></div>\n</td><td align=\"right\">\n  <input type=\"submit\" id=\"summarize\" value=\"Summarize\">\n</td></tr>\n<tr>\n<td>&nbsp;</td><td colspan=\"4\">\n  <small>(Dates are optional, and in YYYY-MM-DD format)</small>\n</td>\n<tr><td align=\"right\">\n  <b>Group by</b>:\n</td><td colspan=\"2\">\n  <input type=\"radio\" name=\"group_by\" id=\"number\" value=\"number\" ";
+#line 303 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('group_by') eq 'number') {
+        $output .=  'checked="checked"';
+        }
+        
+        $output .=  "><label \n  for=\"number\" accesskey=\"n\">";
+#line 306 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
+        $output .=  " <u>N</u>umber</label>\n  <input type=\"radio\" name=\"group_by\" id=\"owner\" value=\"owner\" ";
+#line 307 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('group_by') eq 'owner') {
+        $output .=  'checked="checked"';
+        }
+        
+        $output .=  "><label \n  for=\"owner\" accesskey=\"d\"><u>D</u>eveloper</label>\n</td><td colspan=\"2\">\n  <label for=\"ctype\"><b>Format</b></label>: <select name=\"ctype\" id=\"ctype\">\n    <option value=\"html\">HTML Report</option>\n  </select>\n</td></tr><tr>\n<td>&nbsp;</td><td colspan=\"4\">\n  <input type=\"checkbox\" name=\"monthly\" ";
+#line 317 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('monthly')) {
+        $output .=  'checked="checked"';
+        }
+        
+        $output .=  " id=\"monthly\">\n  <label for=\"monthly\" accesskey=\"m\">Split by <u>m</u>onth</label>\n  ";
+        $output .=  "\n  &nbsp;\n  <input type=\"checkbox\" name=\"detailed\" ";
+#line 322 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('detailed')) {
+        $output .=  'checked="checked"';
+        }
+        
+        $output .=  " id=\"detailed\">\n  <label for=\"detailed\" accesskey=\"t\">De<u>t</u>ailed summaries</label>\n  &nbsp;\n  <input type=\"checkbox\" name=\"inactive\" ";
+#line 326 "template/en/default/bug/summarize-time.html.tmpl"
+        if ($stash->get('inactive')) {
+        $output .=  'checked="checked"';
+        }
+        
+        $output .=  " id=\"inactive\">\n  <label for=\"inactive\" accesskey=\"i\">Also show <u>i</u>nactive\n  ";
+#line 329 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  "</label>\n</td>\n</tr></table>\n\n</form>\n<script type=\"text/javascript\">\n  <!--\n    ";
+#line 336 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->process('global/calendar.js.tmpl', { 'id' => 'start_date' });
+#line 337 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->process('global/calendar.js.tmpl', { 'id' => 'end_date' });
+        $output .=  "\n    document.forms['summary'].start_date.focus();\n  //--></script>\n<hr noshade size=1>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'section_total' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1023,6 +967,62 @@ Template::Document->new({
         
 #line 247 "template/en/default/bug/summarize-time.html.tmpl"
         $stash->set(['global', 0, 'grand_total', 0], $stash->get(['global', 0, 'grand_total', 0]) + $stash->get(['global', 0, 'total', 0]));
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'owner_report' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 85 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set(['global', 0, 'total', 0], 0);
+        $stash->set(['global', 0, 'bug_count', 0], {   });
+        $stash->set(['global', 0, 'owner_count', 0], {   });
+        $output .=  "\n    <table cellpadding=\"4\" cellspacing=\"0\" width=\"90%\" class=\"realitems owner\">";
+#line 90 "template/en/default/bug/summarize-time.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['workdata', 0, 'keys', 0, 'sort', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'owner'} = $_tt_value;
+#line 88 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->include('do_one_owner', { 'owner' => $stash->get('owner'), 'ownerdata' => $stash->get(['workdata', 0, $stash->get('owner'), 0]), 'detailed' => $stash->get('detailed') });;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n";
+#line 1 "template/en/default/bug/summarize-time.html.tmpl"
+        $stash->set('additional', ($stash->get(['global', 0, 'owner_count', 0, 'size', 0]) . " developers \@\n                     " . $stash->get(['global', 0, 'bug_count', 0, 'size', 0]) . " " . $stash->get(['terms', 0, 'bugs', 0])));
+        $output .=  " ";
+#line 94 "template/en/default/bug/summarize-time.html.tmpl"
+        $output .=  $context->include('section_total', { 'colspan' => 3, 'additional' => $stash->get('additional') });
+        $output .=  "\n    </table>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

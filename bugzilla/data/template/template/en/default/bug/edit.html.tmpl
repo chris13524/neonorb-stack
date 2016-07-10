@@ -319,6 +319,372 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'comment_box' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <div id=\"add_comment\" class=\"bz_section_additional_comments\">";
+#line 1104 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['user', 0, 'id', 0])) {
+        $output .=  "\n      <label for=\"comment\" accesskey=\"c\"><b>Additional \n        <u>C</u>omments</b></label>:\n";
+#line 1052 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['user', 0, 'is_insider', 0]) && $stash->get(['bug', 0, 'check_can_change_field', [ 'longdesc', 0, 1 ]])) {
+        $output .=  "\n        <input type=\"checkbox\" name=\"comment_is_private\" value=\"1\"\n               id=\"newcommentprivacy\"\n               onClick=\"updateCommentTagControl(this, 'comment')\">\n        <label for=\"newcommentprivacy\">\n          Make comment private (visible only to members of the\n          <strong>";
+#line 1050 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['Param', [ 'insidergroup' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</strong> group)\n        </label>";
+        }
+        
+        $output .=  "\n\n      <!-- This table keeps the submit button aligned with the box. -->\n      <table><tr><td>";
+#line 1072 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'longdesc', 0, 1 ]])) {
+#line 1057 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/textarea.html.tmpl', { 'name' => 'comment', 'id' => 'comment', 'minrows' => 10, 'maxrows' => 25, 'cols' => '80' });
+#line 1068 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['user', 0, 'is_insider', 0])) {
+        $output .=  "\n            <script>\n               updateCommentTagControl(document.getElementById('newcommentprivacy'), 'comment');\n            </script>";
+        }
+        
+#line 1069 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['Hook', 0, 'process', [ 'after_comment_textarea', 'bug/edit.html.tmpl' ]]);
+        }
+        else {
+        $output .=  "\n          You are not allowed to make an additional comment on this ";
+#line 1071 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  ".";
+        }
+        
+        $output .=  "\n        <br>";
+#line 1074 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('commit_button', { 'id' => '' });
+        $output .=  "\n\n        <table id=\"bug_status_bottom\"\n               class=\"status\" cellspacing=\"0\" cellpadding=\"0\">\n          <tr>\n            <th class=\"field_label\">\n              <a href=\"page.cgi?id=fields.html#bug_status\">Status</a>:\n            </th>\n            <td>";
+#line 1083 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('bug/knob.html.tmpl');
+        $output .=  "\n            </td>\n          </tr>\n        </table>\n      </td></tr></table>\n\n    ";
+        }
+        else {
+        $output .=  "\n      <table>\n        <tr>\n          <td>\n            <fieldset>\n              <legend>Note</legend>\n              You need to\n              <a href=\"show_bug.cgi?id=";
+#line 1098 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+        $output .=  "&amp;GoAheadAndLogIn=1\">log in</a>\n              before you can comment on or make changes to this ";
+#line 1099 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  ".\n            </fieldset>\n          </td>\n        </tr> \n      </table>";
+        }
+        
+        $output .=  "\n  </div>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_url_keyword_whiteboard' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <tr>";
+#line 476 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'bug_file_loc', 0]), 'editable' => 1, 'accesskey' => 'u' });
+        $output .=  "\n    <td>";
+#line 492 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]])) {
+        $output .=  "\n        <span id=\"bz_url_edit_container\" class=\"bz_default_hidden\"> ";
+#line 490 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['is_safe_url', [ $stash->get(['bug', 0, 'bug_file_loc', 0]) ]])) {
+        $output .=  "\n           <a href=\"";
+#line 485 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\" target=\"_blank\"\n              title=\"";
+#line 486 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+#line 487 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('truncate', [ 40 ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</a>";
+        }
+        else {
+#line 489 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "\n        (<a href=\"#\" id=\"bz_url_edit_action\">edit</a>)</span>";
+        }
+        
+        $output .=  "\n      <span id=\"bz_url_input_area\">";
+#line 494 "template/en/default/bug/edit.html.tmpl"
+        
+        # CAPTURE
+        $stash->set('url_output', do {
+            my $output = '';
+        $output .=  $context->process('input', { 'no_td' => 1, 'inputname' => 'bug_file_loc', 'size' => '40', 'colspan' => 2 });
+            $output;
+        });
+        
+#line 500 "template/en/default/bug/edit.html.tmpl"
+        if (! $stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]]) && $stash->get(['is_safe_url', [ $stash->get(['bug', 0, 'bug_file_loc', 0]) ]])) {
+        $output .=  "\n          <a href=\"";
+#line 497 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+#line 497 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('url_output');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</a>";
+        }
+        else {
+#line 499 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('url_output');
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "\n      </span>";
+#line 510 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]])) {
+        $output .=  "\n        <script type=\"text/javascript\">\n          hideEditableField('bz_url_edit_container', \n                            'bz_url_input_area', \n                            'bz_url_edit_action', \n                            'bug_file_loc', \n                            \"";
+#line 508 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\");\n        </script>";
+        }
+        
+        $output .=  "\n    </td>\n  </tr>\n  ";
+#line 523 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['Param', [ 'usestatuswhiteboard' ]])) {
+        $output .=  "\n    <tr>";
+#line 516 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'status_whiteboard', 0]), 'editable' => 1, 'accesskey' => 'w' });
+#line 521 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('input', { 'inputname' => 'status_whiteboard', 'size' => '40', 'colspan' => 2 });
+        $output .=  "\n    </tr>";
+        }
+        
+        $output .=  "\n  ";
+#line 539 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get('use_keywords')) {
+        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label for=\"keywords\" accesskey=\"k\">\n          <a href=\"describekeywords.cgi\"><u>K</u>eywords</a></label>:\n      </th>\n      <td class=\"field_value\" colspan=\"2\">";
+#line 532 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'keywords', 0]), 'value' => $stash->get(['bug', 0, 'keywords', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'keywords', 0, 1 ]]), 'no_tds' => 1, 'possible_values' => $stash->get('all_keywords') });
+        $output .=  "\n      </td>\n    </tr>";
+        }
+        
+        $output .=  "\n";
+#line 548 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['user', 0, 'id', 0])) {
+        $output .=  "\n    <tr>";
+#line 543 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'tag', 0]), 'value' => $stash->get(['bug', 0, 'tags', 0, 'join', [ ', ' ]]), 'editable' => 1, 'possible_values' => $stash->get(['user', 0, 'tags', 0, 'keys', 0]) });
+        $output .=  "\n    </tr>";
+        }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_details1' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n\n    ";
+        $output .=  "\n    ";
+        $output .=  "\n    ";
+        $output .=  "\n    <tr>";
+#line 233 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'product', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'product', 0]), 'desc_url' => 'describecomponents.cgi', 'value' => $stash->get(['bug', 0, 'product', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'product', 0, 1 ]]) });
+        $output .=  "\n    </tr>\n\n    ";
+        $output .=  "\n    <tr class=\"bz_default_hidden\">";
+#line 246 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'classification', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'classification', 0]), 'value' => $stash->get(['bug', 0, 'classification', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'product', 0, 1 ]]) });
+        $output .=  "\n    </tr>\n    ";
+        $output .=  "    \n    ";
+        $output .=  "\n    ";
+        $output .=  "\n    <tr>";
+#line 1 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'component', 0]), 'value' => $stash->get(['bug', 0, 'component', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'component', 0]), 'desc_url' => ("describecomponents.cgi?product=" . $stash->get(['bug', 0, 'product', 0])), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'component', 0, 1 ]]) });
+        $output .=  "\n    </tr>\n    <tr>";
+#line 264 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'version', 0]), 'editable' => 1 });
+        $output .=  "\n        ";
+#line 267 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('select', { 'selname' => 'version' });
+        $output .=  "\n    </tr>\n    ";
+        $output .=  "    \n    ";
+        $output .=  "\n    ";
+        $output .=  "    \n    <tr>";
+#line 273 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'rep_platform', 0]), 'editable' => 1, 'accesskey' => 'h' });
+        $output .=  "\n      <td class=\"field_value\">";
+#line 276 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'rep_platform', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'rep_platform', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'rep_platform', 0, 1 ]]) });
+        $output .=  "\n       ";
+#line 280 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'op_sys', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'op_sys', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'op_sys', 0, 1 ]]) });
+        $output .=  "\n      </td>\n    </tr>\n\n\n";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_dependson_blocks' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <tr>";
+#line 579 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('dependencies', { 'field' => $stash->get(['bug_fields', 0, 'dependson', 0]), 'deps' => $stash->get(['bug', 0, 'depends_on_obj', 0]) });
+        $output .=  "\n  </tr>\n  \n  <tr>";
+#line 584 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('dependencies', { 'field' => $stash->get(['bug_fields', 0, 'blocked', 0]), 'deps' => $stash->get(['bug', 0, 'blocks_obj', 0]) });
+        $output .=  "\n  </tr>\n  \n  <tr>\n    <th>&nbsp;</th>\n  \n    <td colspan=\"2\" align=\"left\" id=\"show_dependency_tree_or_graph\">\n      Show dependency <a href=\"showdependencytree.cgi?id=";
+#line 592 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+        $output .=  "&amp;hide_resolved=1\">tree</a>\n  ";
+#line 596 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['Param', [ 'webdotbase' ]])) {
+        $output .=  "\n        /&nbsp;<a href=\"showdependencygraph.cgi?id=";
+#line 595 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+        $output .=  "\">graph</a>";
+        }
+        
+        $output .=  "\n    </td>\n  </tr>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'commit_button' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -345,122 +711,6 @@ Template::Document->new({
         $output .=  "\">\n    </div>";
         }
         
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'select' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <td>";
-#line 1128 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ $stash->get('selname'), 0, 1 ]]) && $stash->get(['bug', 0, 'choices', 0, $stash->get('selname'), 0, 'size', 0]) > 1) {
-        $output .=  "\n      <input type=\"hidden\" id=\"";
-#line 1116 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get('selname');
-        $output .=  "_dirty\">\n      <select id=\"";
-#line 1117 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get('selname');
-        $output .=  "\" name=\"";
-#line 1117 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get('selname');
-        $output .=  "\">";
-#line 1124 "template/en/default/bug/edit.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, 'choices', 0, $stash->get('selname'), 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'x'} = $_tt_value;
-#line 1119 "template/en/default/bug/edit.html.tmpl"
-        if (! $stash->get(['x', 0, 'is_active', 0]) && $stash->get(['x', 0, 'name', 0]) ne $stash->get(['bug', 0, $stash->get('selname'), 0])) {
-        ($_tt_value, $_tt_error) = $_tt_list->get_next();
-        next FOR1;
-        
-        }
-        
-        $output .=  "\n          <option value=\"";
-#line 1120 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['x', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"";
-#line 1121 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['x', 0, 'name', 0]) eq $stash->get(['bug', 0, $stash->get('selname'), 0])) {
-        $output .=  ' selected';
-        }
-        
-        $output .=  ">";
-#line 1122 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['x', 0, 'name', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\n          </option>";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-        $output .=  "\n      </select>";
-        }
-        else {
-#line 1127 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, $stash->get('selname'), 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "\n  </td>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -695,482 +945,6 @@ Template::Document->new({
         
             return $output;
         },
-        'section_flags' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  ";
-#line 834 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('show_bug_flags', 0);
-#line 835 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('bug_flags_set', 0);
-#line 836 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('show_more_flags', 0);
-#line 848 "template/en/default/bug/edit.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, 'flag_types', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'type'} = $_tt_value;
-#line 840 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['type', 0, 'flags', 0, 'size', 0]) || ($stash->get(['user', 0, 'id', 0]) && $stash->get(['type', 0, 'is_active', 0]) && $stash->get(['user', 0, 'can_request_flag', [ $stash->get('type') ]]))) {
-#line 839 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('show_bug_flags', 1);
-        }
-        
-#line 843 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['user', 0, 'id', 0]) && $stash->get(['type', 0, 'is_active', 0]) && (! $stash->get(['type', 0, 'flags', 0, 'size', 0]) || $stash->get(['type', 0, 'is_multiplicable', 0]))) {
-#line 842 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('show_more_flags', 1);
-        }
-        
-#line 846 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['type', 0, 'flags', 0, 'size', 0])) {
-#line 845 "template/en/default/bug/edit.html.tmpl"
-        $stash->set('bug_flags_set', 1);
-        }
-        
-#line 847 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get('show_bug_flags') && $stash->get('show_more_flags') && $stash->get('bug_flags_set')) {
-        last FOR1;
-        }
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-#line 883 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get('show_bug_flags')) {
-        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label>Flags:</label>\n      </th>\n      <td>";
-#line 859 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'flag_types', 0, 'size', 0])) {
-#line 856 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('flag/list.html.tmpl', { 'flag_no_header' => 1, 'flag_types' => $stash->get(['bug', 0, 'flag_types', 0]), 'any_flags_requesteeble' => $stash->get(['bug', 0, 'any_flags_requesteeble', 0]) });
-        }
-        
-#line 880 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get('show_more_flags')) {
-        $output .=  "\n          <span id=\"bz_flags_more_container\" class=\"bz_default_hidden\">";
-#line 862 "template/en/default/bug/edit.html.tmpl"
-        if (! $stash->get('bug_flags_set')) {
-        $output .=  "<em>None yet set</em>";
-        }
-        
-        $output .=  "\n            (<a href=\"#\" id=\"bz_flags_more_action\">";
-#line 863 "template/en/default/bug/edit.html.tmpl"
-        if (! $stash->get('bug_flags_set')) {
-        $output .=  "set";
-        }
-        else {
-        $output .=  "more";
-        }
-        
-        $output .=  " flags</a>)\n          </span>\n          <script type=\"text/javascript\">\n            YAHOO.util.Dom.removeClass('bz_flags_more_container', 'bz_default_hidden');\n            var table = YAHOO.util.Dom.get(\"flags\");\n            var rows = YAHOO.util.Dom.getElementsByClassName('bz_flag_type', 'tbody', table);\n            for (var i = 0; i < rows.length; i++) {\n                YAHOO.util.Dom.addClass(rows[i], 'bz_default_hidden');\n            }\n            YAHOO.util.Event.addListener('bz_flags_more_action', 'click', function (e) {\n                YAHOO.util.Dom.addClass('bz_flags_more_container', 'bz_default_hidden');\n                for (var i = 0; i < rows.length; i++) {\n                    YAHOO.util.Dom.removeClass(rows[i], 'bz_default_hidden');\n                }\n                YAHOO.util.Event.preventDefault(e);\n            }); \n          </script>";
-        }
-        
-        $output .=  "\n      </td>\n    </tr>";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_title' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  ";
-        $output .=  "\n  <div class=\"bz_alias_short_desc_container edit_form\">";
-#line 166 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('commit_button', { 'id' => '_top' });
-        $output .=  "\n     <a href=\"show_bug.cgi?id=";
-#line 167 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-        $output .=  "\">";
-        
-        $output .=  "<b>";
-#line 168 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
-        $output .=  "&nbsp;";
-#line 168 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</b>";
-        
-        $output .=  "</a> -<span id=\"summary_alias_container\" class=\"bz_default_hidden\"> ";
-#line 172 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'alias', 0]) ne '') {
-        $output .=  "\n        (<span id=\"alias_nonedit_display\">";
-#line 171 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'alias', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</span>) ";
-        }
-        
-        $output .=  "\n      <span id=\"short_desc_nonedit_display\">";
-#line 173 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('quoteUrls', [ $stash->get('bug') ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</span>";
-#line 177 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'short_desc', 0, 1 ]]) || $stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]])) {
-        $output .=  "\n        <small class=\"editme\">(<a href=\"#\" id=\"editme_action\">edit</a>)</small>";
-        }
-        
-        $output .=  "\n     </span>\n  \n       \n    <div id=\"summary_alias_input\">\n      <table id=\"summary\"> \n        <tr>";
-#line 194 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]])) {
-        $output .=  "      ";
-#line 185 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'alias', 0]), 'editable' => 1 });
-        $output .=  "\n            <td>";
-        }
-        elsif ($stash->get(['bug', 0, 'alias', 0])) {
-        $output .=  "\n            <td colspan=\"2\">(";
-        }
-        else {
-        $output .=  "\n            <td colspan=\"2\">";
-        }
-        
-#line 195 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('input', { 'inputname' => 'alias', 'size' => '20', 'maxlength' => '20', 'no_td' => 1 });
-#line 199 "template/en/default/bug/edit.html.tmpl"
-        if (! $stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]]) && $stash->get(['bug', 0, 'alias', 0])) {
-        $output .=  ')';
-        }
-        
-        $output .=  "\n          </td>\n        </tr>\n        ";
-        $output .=  "\n        <tr>";
-#line 205 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'short_desc', 0]), 'editable' => 1, 'accesskey' => 's' });
-        $output .=  "\n          <td>";
-#line 211 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('input', { 'inputname' => 'short_desc', 'size' => '80', 'colspan' => 2, 'maxlength' => 255, 'spellcheck' => 'true', 'no_td' => 1 });
-        $output .=  "\n          </td>\n        </tr>\n      </table>\n    </div>\n  </div>\n  <script type=\"text/javascript\">\n    hideAliasAndSummary('";
-#line 219 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "', '";
-#line 219 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'alias', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "');\n  </script>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_people' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n\n    <tr>\n      <th class=\"field_label\">\n        <a href=\"page.cgi?id=fields.html#assigned_to\">Assigned To</a>:\n      </th>\n      <td>";
-#line 408 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'assigned_to', 0, 1 ]])) {
-        $output .=  "\n          <div id=\"bz_assignee_edit_container\" class=\"bz_default_hidden\">\n            <span>";
-#line 372 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'assigned_to', 0]) });
-        $output .=  "\n              (<a href=\"#\" id=\"bz_assignee_edit_action\">edit</a>)";
-#line 377 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'assigned_to', 0, 'id', 0]) ne $stash->get(['user', 0, 'id', 0])) {
-        $output .=  "\n                (<a title=\"Reassign to yourself\" \n                    href=\"#\" id=\"bz_assignee_take_action\">take</a>)";
-        }
-        
-        $output .=  "\n            </span>\n          </div>\n          <div id=\"bz_assignee_input\">";
-#line 381 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/userselect.html.tmpl', { 'id' => 'assigned_to', 'name' => 'assigned_to', 'value' => $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]), 'classes' => [ 'bz_userfield' ], 'size' => 30 });
-        $output .=  "\n            <br>\n            <input type=\"checkbox\" id=\"set_default_assignee\" name=\"set_default_assignee\" value=\"1\">\n            <label id=\"set_default_assignee_label\" for=\"set_default_assignee\">Reset Assignee to default</label>\n          </div>\n          <script type=\"text/javascript\">\n           hideEditableField('bz_assignee_edit_container', \n                             'bz_assignee_input', \n                             'bz_assignee_edit_action', \n                             'assigned_to', \n                             '";
-#line 397 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "' );\n           hideEditableField('bz_assignee_edit_container',\n                             'bz_assignee_input',\n                             'bz_assignee_take_action',\n                             'assigned_to',\n                             '";
-#line 402 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "',\n                             '";
-#line 403 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['user', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "' );\n           initDefaultCheckbox('assignee');                  \n          </script>";
-        }
-        else {
-#line 407 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'assigned_to', 0]) });
-        }
-        
-        $output .=  "\n      </td>\n    </tr>\n";
-#line 463 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['Param', [ 'useqacontact' ]])) {
-        $output .=  "\n    <tr>";
-#line 414 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'qa_contact', 0]), 'editable' => 1, 'accesskey' => 'q' });
-        $output .=  "\n      <td>";
-#line 460 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'qa_contact', 0, 1 ]])) {
-        $output .=  "\n          <div id=\"bz_qa_contact_edit_container\" class=\"bz_default_hidden\">\n            <span>";
-#line 423 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'qa_contact', 0]) });
-        $output .=  "\n              (<a href=\"#\" id=\"bz_qa_contact_edit_action\">edit</a>)";
-#line 428 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'qa_contact', 0, 'id', 0]) ne $stash->get(['user', 0, 'id', 0])) {
-        $output .=  "\n                (<a title=\"Change QA contact to yourself\" \n                    href=\"#\" id=\"bz_qa_contact_take_action\">take</a>)";
-        }
-        
-        $output .=  "\n            </span>\n          </div>\n          <div id=\"bz_qa_contact_input\">";
-#line 432 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/userselect.html.tmpl', { 'id' => 'qa_contact', 'name' => 'qa_contact', 'value' => $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]), 'size' => 30, 'classes' => [ 'bz_userfield' ], 'emptyok' => 1 });
-        $output .=  "\n            <br>\n            <input type=\"checkbox\" id=\"set_default_qa_contact\" name=\"set_default_qa_contact\" value=\"1\">\n            <label for=\"set_default_qa_contact\" id=\"set_default_qa_contact_label\">Reset QA Contact to default</label>\n          </div>\n          <script type=\"text/javascript\">\n            hideEditableField('bz_qa_contact_edit_container', \n                              'bz_qa_contact_input', \n                              'bz_qa_contact_edit_action', \n                              'qa_contact', \n                              '";
-#line 449 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "');\n            hideEditableField('bz_qa_contact_edit_container', \n                              'bz_qa_contact_input', \n                              'bz_qa_contact_take_action', \n                              'qa_contact', \n                              '";
-#line 454 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "',\n                              '";
-#line 455 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['user', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "');\n            initDefaultCheckbox('qa_contact');\n          </script>";
-        }
-        else {
-#line 459 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'qa_contact', 0]) });
-        }
-        
-        $output .=  "\n      </td>\n    </tr>";
-        }
-        
-        $output .=  "\n    <script type=\"text/javascript\">\n      assignToDefaultOnChange(['product', 'component'],\n        '";
-#line 466 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'component_obj', 0, 'default_assignee', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "',\n        '";
-#line 467 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'component_obj', 0, 'default_qa_contact', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "');\n    </script>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_details1' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n\n    ";
-        $output .=  "\n    ";
-        $output .=  "\n    ";
-        $output .=  "\n    <tr>";
-#line 233 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'product', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'product', 0]), 'desc_url' => 'describecomponents.cgi', 'value' => $stash->get(['bug', 0, 'product', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'product', 0, 1 ]]) });
-        $output .=  "\n    </tr>\n\n    ";
-        $output .=  "\n    <tr class=\"bz_default_hidden\">";
-#line 246 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'classification', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'classification', 0]), 'value' => $stash->get(['bug', 0, 'classification', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'product', 0, 1 ]]) });
-        $output .=  "\n    </tr>\n    ";
-        $output .=  "    \n    ";
-        $output .=  "\n    ";
-        $output .=  "\n    <tr>";
-#line 1 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'component', 0]), 'value' => $stash->get(['bug', 0, 'component', 0]), 'override_legal_values' => $stash->get(['bug', 0, 'choices', 0, 'component', 0]), 'desc_url' => ("describecomponents.cgi?product=" . $stash->get(['bug', 0, 'product', 0])), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'component', 0, 1 ]]) });
-        $output .=  "\n    </tr>\n    <tr>";
-#line 264 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'version', 0]), 'editable' => 1 });
-        $output .=  "\n        ";
-#line 267 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('select', { 'selname' => 'version' });
-        $output .=  "\n    </tr>\n    ";
-        $output .=  "    \n    ";
-        $output .=  "\n    ";
-        $output .=  "    \n    <tr>";
-#line 273 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'rep_platform', 0]), 'editable' => 1, 'accesskey' => 'h' });
-        $output .=  "\n      <td class=\"field_value\">";
-#line 276 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'rep_platform', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'rep_platform', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'rep_platform', 0, 1 ]]) });
-        $output .=  "\n       ";
-#line 280 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'op_sys', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'op_sys', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'op_sys', 0, 1 ]]) });
-        $output .=  "\n      </td>\n    </tr>\n\n\n";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'section_status' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1253,82 +1027,34 @@ Template::Document->new({
         
             return $output;
         },
-        'section_customfields' => sub {
+        'section_details2' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n";
-#line 892 "template/en/default/bug/edit.html.tmpl"
-        # USE
-        $stash->set('Bugzilla',
-                    $context->plugin('Bugzilla'));
-#line 905 "template/en/default/bug/edit.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['Bugzilla', 0, 'active_custom_fields', 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'field'} = $_tt_value;
-        $output .=  "\n    <tr>";
-#line 895 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('bug/field.html.tmpl', { 'value' => $stash->get(['bug', 0, $stash->get(['field', 0, 'name', 0]), 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ $stash->get(['field', 0, 'name', 0]), 0, 1 ]]), 'value_span' => 2 });
-        $output .=  "\n    </tr>";
-#line 904 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get('extra_field_item')) {
-        $output .=  "\n      <tr>\n        <th class=\"field_label\">";
-#line 901 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['extra_field_item', 0, 'header', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</th>\n        <td>";
-#line 902 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['extra_field_item', 0, 'data', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</td>\n      </tr>";
+        $output .=  "\n\n ";
+        $output .=  "\n ";
+        $output .=  "\n ";
+        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label for=\"priority\" accesskey=\"i\">\n          <a href=\"page.cgi?id=fields.html#importance\"><u>I</u>mportance</a></label>:\n      </th>\n      <td>";
+#line 333 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'priority', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'priority', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'priority', 0, 1 ]]) });
+        $output .=  "\n       ";
+#line 337 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'bug_severity', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'bug_severity', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'bug_severity', 0, 1 ]]) });
+#line 341 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['Hook', 0, 'process', [ 'after_importance', 'bug/edit.html.tmpl' ]]);
+        $output .=  "\n      </td>\n    </tr>\n";
+#line 354 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['Param', [ 'usetargetmilestone' ]]) && $stash->get(['bug', 0, 'target_milestone', 0])) {
+        $output .=  "\n      <tr>\n        <th class=\"field_label\">\n          <label for=\"target_milestone\">\n            <a href=\"page.cgi?id=fields.html#target_milestone\">\n            Target&nbsp;Milestone</a></label>:\n        </th>";
+#line 352 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('select', { 'selname' => 'target_milestone' });
+        $output .=  "\n      </tr>";
         }
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
         
+        $output .=  "\n  ";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -1563,236 +1289,26 @@ Template::Document->new({
         
             return $output;
         },
-        'section_details2' => sub {
+        'section_flags' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n\n ";
-        $output .=  "\n ";
-        $output .=  "\n ";
-        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label for=\"priority\" accesskey=\"i\">\n          <a href=\"page.cgi?id=fields.html#importance\"><u>I</u>mportance</a></label>:\n      </th>\n      <td>";
-#line 333 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'priority', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'priority', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'priority', 0, 1 ]]) });
-        $output .=  "\n       ";
-#line 337 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'bug_severity', 0]), 'no_tds' => 1, 'value' => $stash->get(['bug', 0, 'bug_severity', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'bug_severity', 0, 1 ]]) });
-#line 341 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['Hook', 0, 'process', [ 'after_importance', 'bug/edit.html.tmpl' ]]);
-        $output .=  "\n      </td>\n    </tr>\n";
-#line 354 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['Param', [ 'usetargetmilestone' ]]) && $stash->get(['bug', 0, 'target_milestone', 0])) {
-        $output .=  "\n      <tr>\n        <th class=\"field_label\">\n          <label for=\"target_milestone\">\n            <a href=\"page.cgi?id=fields.html#target_milestone\">\n            Target&nbsp;Milestone</a></label>:\n        </th>";
-#line 352 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('select', { 'selname' => 'target_milestone' });
-        $output .=  "\n      </tr>";
-        }
-        
         $output .=  "\n  ";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_spacer' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <tr>\n    <td colspan=\"2\" class=\"bz_section_spacer\"></td>\n  </tr>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_see_also' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 825 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['Param', [ 'use_see_also' ]]) || $stash->get(['bug', 0, 'see_also', 0, 'size', 0])) {
-        $output .=  "\n    <tr>";
-#line 819 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'see_also', 0]), 'value' => $stash->get(['bug', 0, 'see_also', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'see_also', 0, 1 ]]) });
-        $output .=  "\n    </tr>";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'comment_box' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <div id=\"add_comment\" class=\"bz_section_additional_comments\">";
-#line 1104 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['user', 0, 'id', 0])) {
-        $output .=  "\n      <label for=\"comment\" accesskey=\"c\"><b>Additional \n        <u>C</u>omments</b></label>:\n";
-#line 1052 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['user', 0, 'is_insider', 0]) && $stash->get(['bug', 0, 'check_can_change_field', [ 'longdesc', 0, 1 ]])) {
-        $output .=  "\n        <input type=\"checkbox\" name=\"comment_is_private\" value=\"1\"\n               id=\"newcommentprivacy\"\n               onClick=\"updateCommentTagControl(this, 'comment')\">\n        <label for=\"newcommentprivacy\">\n          Make comment private (visible only to members of the\n          <strong>";
-#line 1050 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['Param', [ 'insidergroup' ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</strong> group)\n        </label>";
-        }
-        
-        $output .=  "\n\n      <!-- This table keeps the submit button aligned with the box. -->\n      <table><tr><td>";
-#line 1072 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'longdesc', 0, 1 ]])) {
-#line 1057 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('global/textarea.html.tmpl', { 'name' => 'comment', 'id' => 'comment', 'minrows' => 10, 'maxrows' => 25, 'cols' => '80' });
-#line 1068 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['user', 0, 'is_insider', 0])) {
-        $output .=  "\n            <script>\n               updateCommentTagControl(document.getElementById('newcommentprivacy'), 'comment');\n            </script>";
-        }
-        
-#line 1069 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['Hook', 0, 'process', [ 'after_comment_textarea', 'bug/edit.html.tmpl' ]]);
-        }
-        else {
-        $output .=  "\n          You are not allowed to make an additional comment on this ";
-#line 1071 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  ".";
-        }
-        
-        $output .=  "\n        <br>";
-#line 1074 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('commit_button', { 'id' => '' });
-        $output .=  "\n\n        <table id=\"bug_status_bottom\"\n               class=\"status\" cellspacing=\"0\" cellpadding=\"0\">\n          <tr>\n            <th class=\"field_label\">\n              <a href=\"page.cgi?id=fields.html#bug_status\">Status</a>:\n            </th>\n            <td>";
-#line 1083 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('bug/knob.html.tmpl');
-        $output .=  "\n            </td>\n          </tr>\n        </table>\n      </td></tr></table>\n\n    ";
-        }
-        else {
-        $output .=  "\n      <table>\n        <tr>\n          <td>\n            <fieldset>\n              <legend>Note</legend>\n              You need to\n              <a href=\"show_bug.cgi?id=";
-#line 1098 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-        $output .=  "&amp;GoAheadAndLogIn=1\">log in</a>\n              before you can comment on or make changes to this ";
-#line 1099 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  ".\n            </fieldset>\n          </td>\n        </tr> \n      </table>";
-        }
-        
-        $output .=  "\n  </div>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_timetracking' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <table class=\"bz_time_tracking_table\">\n    <tr>";
-#line 966 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'estimated_time', 0]), 'editable' => 1 });
-        $output .=  "\n      <th>\n        Current Est.:\n      </th>";
-#line 972 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'work_time', 0]), 'editable' => 1 });
-#line 975 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'remaining_time', 0]), 'editable' => 1 });
-#line 978 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'percentage_complete', 0]), 'editable' => 1 });
-        $output .=  "\n      <th>\n        Gain:\n      </th>";
-#line 984 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'deadline', 0]), 'editable' => 1 });
-        $output .=  "\n    </tr>\n    <tr>\n      <td>\n        <input name=\"estimated_time\" id=\"estimated_time\"\n               value=\"";
-#line 991 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'estimated_time', 0]) });
-        $output .=  "\"\n               size=\"6\" maxlength=\"6\">\n      </td>\n      <td>";
-#line 996 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('formattimeunit', { 'time_unit' => ($stash->get(['bug', 0, 'actual_time', 0]) + $stash->get(['bug', 0, 'remaining_time', 0])) });
-        $output .=  "\n      </td>\n      <td>";
-#line 1000 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'actual_time', 0]) });
-        $output .=  " +\n        <input name=\"work_time\" id=\"work_time\"\n               value=\"0\" size=\"3\" maxlength=\"6\"\n               onchange=\"adjustRemainingTime();\">\n      </td>\n      <td>\n        <input name=\"remaining_time\" id=\"remaining_time\"\n               value=\"";
-#line 1007 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'remaining_time', 0]) });
-        $output .=  "\"\n               size=\"6\" maxlength=\"6\" onchange=\"updateRemainingTime();\">\n      </td>\n      <td>";
-#line 1012 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('calculatepercentage', { 'act' => $stash->get(['bug', 0, 'actual_time', 0]), 'rem' => $stash->get(['bug', 0, 'remaining_time', 0]) });
-        $output .=  "\n      </td>\n      <td>";
-#line 1016 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'estimated_time', 0]) - ($stash->get(['bug', 0, 'actual_time', 0]) + $stash->get(['bug', 0, 'remaining_time', 0])) });
-        $output .=  "\n      </td>\n       <td>";
-#line 1019 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'deadline', 0]), 'value' => $stash->get(['bug', 0, 'deadline', 0]), 'no_tds' => 1, 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'deadline', 0, 1 ]]) });
-        $output .=  "\n      </td>        \n    </tr>\n    <tr>\n      <td colspan=\"7\" class=\"bz_summarize_time\">\n        <a href=\"summarize_time.cgi?id=";
-#line 1026 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-        $output .=  "&amp;do_depends=1\">\n        Summarize time (including time for ";
-#line 1027 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
-        $output .=  "\n        blocking this ";
-#line 1028 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  ")</a>\n      </td>\n    </tr>\n  </table> ";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'section_duplicates' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 556 "template/en/default/bug/edit.html.tmpl"
-        if (!($stash->get(['bug', 0, 'duplicates', 0, 'size', 0]))) {
-        $context->throw('return', '', \$output);
-        }
-        
-        $output .=  "\n  <tr>\n    <th class=\"field_label\">\n      <label for=\"duplicates\">Duplicates</label>:\n    </th>\n    <td class=\"field_value\" colspan=\"2\">\n      <span id=\"duplicates\">";
-#line 565 "template/en/default/bug/edit.html.tmpl"
+#line 834 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('show_bug_flags', 0);
+#line 835 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('bug_flags_set', 0);
+#line 836 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('show_more_flags', 0);
+#line 848 "template/en/default/bug/edit.html.tmpl"
         
         # FOREACH 
         do {
             my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, 'duplicates', 0]);
+            my $_tt_list = $stash->get(['bug', 0, 'flag_types', 0]);
             
             unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
                 $_tt_list = Template::Config->iterator($_tt_list)
@@ -1804,33 +1320,30 @@ Template::Document->new({
             $stash->set('loop', $_tt_list);
             eval {
         FOR1:   while (! $_tt_error) {
-                    $stash->{'dupe'} = $_tt_value;
-#line 564 "template/en/default/bug/edit.html.tmpl"
+                    $stash->{'type'} = $_tt_value;
+#line 840 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['type', 0, 'flags', 0, 'size', 0]) || ($stash->get(['user', 0, 'id', 0]) && $stash->get(['type', 0, 'is_active', 0]) && $stash->get(['user', 0, 'can_request_flag', [ $stash->get('type') ]]))) {
+#line 839 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('show_bug_flags', 1);
+        }
         
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
+#line 843 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['user', 0, 'id', 0]) && $stash->get(['type', 0, 'is_active', 0]) && (! $stash->get(['type', 0, 'flags', 0, 'size', 0]) || $stash->get(['type', 0, 'is_multiplicable', 0]))) {
+#line 842 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('show_more_flags', 1);
+        }
         
+#line 846 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['type', 0, 'flags', 0, 'size', 0])) {
+#line 845 "template/en/default/bug/edit.html.tmpl"
+        $stash->set('bug_flags_set', 1);
+        }
         
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('bug_link', [ $stash->get('dupe'), { 'use_alias' => 1 } ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['dupe', 0, 'id', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-#line 564 "template/en/default/bug/edit.html.tmpl"
-        $output .=  ' ';;
+#line 847 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get('show_bug_flags') && $stash->get('show_more_flags') && $stash->get('bug_flags_set')) {
+        last FOR1;
+        }
+        ;
                     ($_tt_value, $_tt_error) = $_tt_list->get_next();
                 }
             };
@@ -1840,25 +1353,38 @@ Template::Document->new({
             die $_tt_error if $_tt_error;
         };
         
-        $output .=  "\n      </span>\n      (<a href=\"buglist.cgi?bug_id=";
-#line 567 "template/en/default/bug/edit.html.tmpl"
+#line 883 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get('show_bug_flags')) {
+        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label>Flags:</label>\n      </th>\n      <td>";
+#line 859 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'flag_types', 0, 'size', 0])) {
+#line 856 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('flag/list.html.tmpl', { 'flag_no_header' => 1, 'flag_types' => $stash->get(['bug', 0, 'flag_types', 0]), 'any_flags_requesteeble' => $stash->get(['bug', 0, 'any_flags_requesteeble', 0]) });
+        }
         
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
+#line 880 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get('show_more_flags')) {
+        $output .=  "\n          <span id=\"bz_flags_more_container\" class=\"bz_default_hidden\">";
+#line 862 "template/en/default/bug/edit.html.tmpl"
+        if (! $stash->get('bug_flags_set')) {
+        $output .=  "<em>None yet set</em>";
+        }
         
-        $output .=  $stash->get(['bug', 0, 'duplicate_ids', 0, 'join', [ ',' ]]);
-            
-            &$_tt_filter($output);
-        };
+        $output .=  "\n            (<a href=\"#\" id=\"bz_flags_more_action\">";
+#line 863 "template/en/default/bug/edit.html.tmpl"
+        if (! $stash->get('bug_flags_set')) {
+        $output .=  "set";
+        }
+        else {
+        $output .=  "more";
+        }
         
-        $output .=  "\">";
-        $output .=  "view as ";
-#line 568 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " list</a>)\n    </td>\n  </tr>";
+        $output .=  " flags</a>)\n          </span>\n          <script type=\"text/javascript\">\n            YAHOO.util.Dom.removeClass('bz_flags_more_container', 'bz_default_hidden');\n            var table = YAHOO.util.Dom.get(\"flags\");\n            var rows = YAHOO.util.Dom.getElementsByClassName('bz_flag_type', 'tbody', table);\n            for (var i = 0; i < rows.length; i++) {\n                YAHOO.util.Dom.addClass(rows[i], 'bz_default_hidden');\n            }\n            YAHOO.util.Event.addListener('bz_flags_more_action', 'click', function (e) {\n                YAHOO.util.Dom.addClass('bz_flags_more_container', 'bz_default_hidden');\n                for (var i = 0; i < rows.length; i++) {\n                    YAHOO.util.Dom.removeClass(rows[i], 'bz_default_hidden');\n                }\n                YAHOO.util.Event.preventDefault(e);\n            }); \n          </script>";
+        }
+        
+        $output .=  "\n      </td>\n    </tr>";
+        }
+        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -2105,211 +1631,6 @@ Template::Document->new({
         
             return $output;
         },
-        'section_url_keyword_whiteboard' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <tr>";
-#line 476 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'bug_file_loc', 0]), 'editable' => 1, 'accesskey' => 'u' });
-        $output .=  "\n    <td>";
-#line 492 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]])) {
-        $output .=  "\n        <span id=\"bz_url_edit_container\" class=\"bz_default_hidden\"> ";
-#line 490 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['is_safe_url', [ $stash->get(['bug', 0, 'bug_file_loc', 0]) ]])) {
-        $output .=  "\n           <a href=\"";
-#line 485 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\" target=\"_blank\"\n              title=\"";
-#line 486 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">";
-#line 487 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('truncate', [ 40 ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</a>";
-        }
-        else {
-#line 489 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "\n        (<a href=\"#\" id=\"bz_url_edit_action\">edit</a>)</span>";
-        }
-        
-        $output .=  "\n      <span id=\"bz_url_input_area\">";
-#line 494 "template/en/default/bug/edit.html.tmpl"
-        
-        # CAPTURE
-        $stash->set('url_output', do {
-            my $output = '';
-        $output .=  $context->process('input', { 'no_td' => 1, 'inputname' => 'bug_file_loc', 'size' => '40', 'colspan' => 2 });
-            $output;
-        });
-        
-#line 500 "template/en/default/bug/edit.html.tmpl"
-        if (! $stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]]) && $stash->get(['is_safe_url', [ $stash->get(['bug', 0, 'bug_file_loc', 0]) ]])) {
-        $output .=  "\n          <a href=\"";
-#line 497 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">";
-#line 497 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('url_output');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</a>";
-        }
-        else {
-#line 499 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('url_output');
-            
-            &$_tt_filter($output);
-        };
-        
-        }
-        
-        $output .=  "\n      </span>";
-#line 510 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'bug_file_loc', 0, 1 ]])) {
-        $output .=  "\n        <script type=\"text/javascript\">\n          hideEditableField('bz_url_edit_container', \n                            'bz_url_input_area', \n                            'bz_url_edit_action', \n                            'bug_file_loc', \n                            \"";
-#line 508 "template/en/default/bug/edit.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('js')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'bug_file_loc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\");\n        </script>";
-        }
-        
-        $output .=  "\n    </td>\n  </tr>\n  ";
-#line 523 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['Param', [ 'usestatuswhiteboard' ]])) {
-        $output .=  "\n    <tr>";
-#line 516 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'status_whiteboard', 0]), 'editable' => 1, 'accesskey' => 'w' });
-#line 521 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->process('input', { 'inputname' => 'status_whiteboard', 'size' => '40', 'colspan' => 2 });
-        $output .=  "\n    </tr>";
-        }
-        
-        $output .=  "\n  ";
-#line 539 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get('use_keywords')) {
-        $output .=  "\n    <tr>\n      <th class=\"field_label\">\n        <label for=\"keywords\" accesskey=\"k\">\n          <a href=\"describekeywords.cgi\"><u>K</u>eywords</a></label>:\n      </th>\n      <td class=\"field_value\" colspan=\"2\">";
-#line 532 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'keywords', 0]), 'value' => $stash->get(['bug', 0, 'keywords', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'keywords', 0, 1 ]]), 'no_tds' => 1, 'possible_values' => $stash->get('all_keywords') });
-        $output .=  "\n      </td>\n    </tr>";
-        }
-        
-        $output .=  "\n";
-#line 548 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['user', 0, 'id', 0])) {
-        $output .=  "\n    <tr>";
-#line 543 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('bug/field.html.tmpl', { 'bug' => $stash->get('bug'), 'field' => $stash->get(['bug_fields', 0, 'tag', 0]), 'value' => $stash->get(['bug', 0, 'tags', 0, 'join', [ ', ' ]]), 'editable' => 1, 'possible_values' => $stash->get(['user', 0, 'tags', 0, 'keys', 0]) });
-        $output .=  "\n    </tr>";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'input' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -2457,40 +1778,6 @@ Template::Document->new({
         
             return $output;
         },
-        'section_dependson_blocks' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <tr>";
-#line 579 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('dependencies', { 'field' => $stash->get(['bug_fields', 0, 'dependson', 0]), 'deps' => $stash->get(['bug', 0, 'depends_on_obj', 0]) });
-        $output .=  "\n  </tr>\n  \n  <tr>";
-#line 584 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $context->include('dependencies', { 'field' => $stash->get(['bug_fields', 0, 'blocked', 0]), 'deps' => $stash->get(['bug', 0, 'blocks_obj', 0]) });
-        $output .=  "\n  </tr>\n  \n  <tr>\n    <th>&nbsp;</th>\n  \n    <td colspan=\"2\" align=\"left\" id=\"show_dependency_tree_or_graph\">\n      Show dependency <a href=\"showdependencytree.cgi?id=";
-#line 592 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-        $output .=  "&amp;hide_resolved=1\">tree</a>\n  ";
-#line 596 "template/en/default/bug/edit.html.tmpl"
-        if ($stash->get(['Param', [ 'webdotbase' ]])) {
-        $output .=  "\n        /&nbsp;<a href=\"showdependencygraph.cgi?id=";
-#line 595 "template/en/default/bug/edit.html.tmpl"
-        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
-        $output .=  "\">graph</a>";
-        }
-        
-        $output .=  "\n    </td>\n  </tr>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'section_dates' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -2556,6 +1843,719 @@ Template::Document->new({
         $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
         $output .=  "\">";
         $output .=  "History</a>)\n    </td>\n  \n  </tr>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_spacer' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <tr>\n    <td colspan=\"2\" class=\"bz_section_spacer\"></td>\n  </tr>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_people' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n\n    <tr>\n      <th class=\"field_label\">\n        <a href=\"page.cgi?id=fields.html#assigned_to\">Assigned To</a>:\n      </th>\n      <td>";
+#line 408 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'assigned_to', 0, 1 ]])) {
+        $output .=  "\n          <div id=\"bz_assignee_edit_container\" class=\"bz_default_hidden\">\n            <span>";
+#line 372 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'assigned_to', 0]) });
+        $output .=  "\n              (<a href=\"#\" id=\"bz_assignee_edit_action\">edit</a>)";
+#line 377 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'assigned_to', 0, 'id', 0]) ne $stash->get(['user', 0, 'id', 0])) {
+        $output .=  "\n                (<a title=\"Reassign to yourself\" \n                    href=\"#\" id=\"bz_assignee_take_action\">take</a>)";
+        }
+        
+        $output .=  "\n            </span>\n          </div>\n          <div id=\"bz_assignee_input\">";
+#line 381 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/userselect.html.tmpl', { 'id' => 'assigned_to', 'name' => 'assigned_to', 'value' => $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]), 'classes' => [ 'bz_userfield' ], 'size' => 30 });
+        $output .=  "\n            <br>\n            <input type=\"checkbox\" id=\"set_default_assignee\" name=\"set_default_assignee\" value=\"1\">\n            <label id=\"set_default_assignee_label\" for=\"set_default_assignee\">Reset Assignee to default</label>\n          </div>\n          <script type=\"text/javascript\">\n           hideEditableField('bz_assignee_edit_container', \n                             'bz_assignee_input', \n                             'bz_assignee_edit_action', \n                             'assigned_to', \n                             '";
+#line 397 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "' );\n           hideEditableField('bz_assignee_edit_container',\n                             'bz_assignee_input',\n                             'bz_assignee_take_action',\n                             'assigned_to',\n                             '";
+#line 402 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "',\n                             '";
+#line 403 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['user', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "' );\n           initDefaultCheckbox('assignee');                  \n          </script>";
+        }
+        else {
+#line 407 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'assigned_to', 0]) });
+        }
+        
+        $output .=  "\n      </td>\n    </tr>\n";
+#line 463 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['Param', [ 'useqacontact' ]])) {
+        $output .=  "\n    <tr>";
+#line 414 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'qa_contact', 0]), 'editable' => 1, 'accesskey' => 'q' });
+        $output .=  "\n      <td>";
+#line 460 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'qa_contact', 0, 1 ]])) {
+        $output .=  "\n          <div id=\"bz_qa_contact_edit_container\" class=\"bz_default_hidden\">\n            <span>";
+#line 423 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'qa_contact', 0]) });
+        $output .=  "\n              (<a href=\"#\" id=\"bz_qa_contact_edit_action\">edit</a>)";
+#line 428 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'qa_contact', 0, 'id', 0]) ne $stash->get(['user', 0, 'id', 0])) {
+        $output .=  "\n                (<a title=\"Change QA contact to yourself\" \n                    href=\"#\" id=\"bz_qa_contact_take_action\">take</a>)";
+        }
+        
+        $output .=  "\n            </span>\n          </div>\n          <div id=\"bz_qa_contact_input\">";
+#line 432 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/userselect.html.tmpl', { 'id' => 'qa_contact', 'name' => 'qa_contact', 'value' => $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]), 'size' => 30, 'classes' => [ 'bz_userfield' ], 'emptyok' => 1 });
+        $output .=  "\n            <br>\n            <input type=\"checkbox\" id=\"set_default_qa_contact\" name=\"set_default_qa_contact\" value=\"1\">\n            <label for=\"set_default_qa_contact\" id=\"set_default_qa_contact_label\">Reset QA Contact to default</label>\n          </div>\n          <script type=\"text/javascript\">\n            hideEditableField('bz_qa_contact_edit_container', \n                              'bz_qa_contact_input', \n                              'bz_qa_contact_edit_action', \n                              'qa_contact', \n                              '";
+#line 449 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "');\n            hideEditableField('bz_qa_contact_edit_container', \n                              'bz_qa_contact_input', \n                              'bz_qa_contact_take_action', \n                              'qa_contact', \n                              '";
+#line 454 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'qa_contact', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "',\n                              '";
+#line 455 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['user', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "');\n            initDefaultCheckbox('qa_contact');\n          </script>";
+        }
+        else {
+#line 459 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('global/user.html.tmpl', { 'who' => $stash->get(['bug', 0, 'qa_contact', 0]) });
+        }
+        
+        $output .=  "\n      </td>\n    </tr>";
+        }
+        
+        $output .=  "\n    <script type=\"text/javascript\">\n      assignToDefaultOnChange(['product', 'component'],\n        '";
+#line 466 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'component_obj', 0, 'default_assignee', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "',\n        '";
+#line 467 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'component_obj', 0, 'default_qa_contact', 0, 'login', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "');\n    </script>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_duplicates' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 556 "template/en/default/bug/edit.html.tmpl"
+        if (!($stash->get(['bug', 0, 'duplicates', 0, 'size', 0]))) {
+        $context->throw('return', '', \$output);
+        }
+        
+        $output .=  "\n  <tr>\n    <th class=\"field_label\">\n      <label for=\"duplicates\">Duplicates</label>:\n    </th>\n    <td class=\"field_value\" colspan=\"2\">\n      <span id=\"duplicates\">";
+#line 565 "template/en/default/bug/edit.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['bug', 0, 'duplicates', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'dupe'} = $_tt_value;
+#line 564 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('bug_link', [ $stash->get('dupe'), { 'use_alias' => 1 } ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['dupe', 0, 'id', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+#line 564 "template/en/default/bug/edit.html.tmpl"
+        $output .=  ' ';;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n      </span>\n      (<a href=\"buglist.cgi?bug_id=";
+#line 567 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'duplicate_ids', 0, 'join', [ ',' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+        $output .=  "view as ";
+#line 568 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " list</a>)\n    </td>\n  </tr>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_see_also' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 825 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['Param', [ 'use_see_also' ]]) || $stash->get(['bug', 0, 'see_also', 0, 'size', 0])) {
+        $output .=  "\n    <tr>";
+#line 819 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'see_also', 0]), 'value' => $stash->get(['bug', 0, 'see_also', 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'see_also', 0, 1 ]]) });
+        $output .=  "\n    </tr>";
+        }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'select' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <td>";
+#line 1128 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ $stash->get('selname'), 0, 1 ]]) && $stash->get(['bug', 0, 'choices', 0, $stash->get('selname'), 0, 'size', 0]) > 1) {
+        $output .=  "\n      <input type=\"hidden\" id=\"";
+#line 1116 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get('selname');
+        $output .=  "_dirty\">\n      <select id=\"";
+#line 1117 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get('selname');
+        $output .=  "\" name=\"";
+#line 1117 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get('selname');
+        $output .=  "\">";
+#line 1124 "template/en/default/bug/edit.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['bug', 0, 'choices', 0, $stash->get('selname'), 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'x'} = $_tt_value;
+#line 1119 "template/en/default/bug/edit.html.tmpl"
+        if (! $stash->get(['x', 0, 'is_active', 0]) && $stash->get(['x', 0, 'name', 0]) ne $stash->get(['bug', 0, $stash->get('selname'), 0])) {
+        ($_tt_value, $_tt_error) = $_tt_list->get_next();
+        next FOR1;
+        
+        }
+        
+        $output .=  "\n          <option value=\"";
+#line 1120 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['x', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"";
+#line 1121 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['x', 0, 'name', 0]) eq $stash->get(['bug', 0, $stash->get('selname'), 0])) {
+        $output .=  ' selected';
+        }
+        
+        $output .=  ">";
+#line 1122 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['x', 0, 'name', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\n          </option>";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n      </select>";
+        }
+        else {
+#line 1127 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, $stash->get('selname'), 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
+        $output .=  "\n  </td>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_customfields' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n";
+#line 892 "template/en/default/bug/edit.html.tmpl"
+        # USE
+        $stash->set('Bugzilla',
+                    $context->plugin('Bugzilla'));
+#line 905 "template/en/default/bug/edit.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['Bugzilla', 0, 'active_custom_fields', 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'field'} = $_tt_value;
+        $output .=  "\n    <tr>";
+#line 895 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('bug/field.html.tmpl', { 'value' => $stash->get(['bug', 0, $stash->get(['field', 0, 'name', 0]), 0]), 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ $stash->get(['field', 0, 'name', 0]), 0, 1 ]]), 'value_span' => 2 });
+        $output .=  "\n    </tr>";
+#line 904 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get('extra_field_item')) {
+        $output .=  "\n      <tr>\n        <th class=\"field_label\">";
+#line 901 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['extra_field_item', 0, 'header', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</th>\n        <td>";
+#line 902 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['extra_field_item', 0, 'data', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</td>\n      </tr>";
+        }
+        ;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_timetracking' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <table class=\"bz_time_tracking_table\">\n    <tr>";
+#line 966 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'estimated_time', 0]), 'editable' => 1 });
+        $output .=  "\n      <th>\n        Current Est.:\n      </th>";
+#line 972 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'work_time', 0]), 'editable' => 1 });
+#line 975 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'remaining_time', 0]), 'editable' => 1 });
+#line 978 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'percentage_complete', 0]), 'editable' => 1 });
+        $output .=  "\n      <th>\n        Gain:\n      </th>";
+#line 984 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'deadline', 0]), 'editable' => 1 });
+        $output .=  "\n    </tr>\n    <tr>\n      <td>\n        <input name=\"estimated_time\" id=\"estimated_time\"\n               value=\"";
+#line 991 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'estimated_time', 0]) });
+        $output .=  "\"\n               size=\"6\" maxlength=\"6\">\n      </td>\n      <td>";
+#line 996 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('formattimeunit', { 'time_unit' => ($stash->get(['bug', 0, 'actual_time', 0]) + $stash->get(['bug', 0, 'remaining_time', 0])) });
+        $output .=  "\n      </td>\n      <td>";
+#line 1000 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'actual_time', 0]) });
+        $output .=  " +\n        <input name=\"work_time\" id=\"work_time\"\n               value=\"0\" size=\"3\" maxlength=\"6\"\n               onchange=\"adjustRemainingTime();\">\n      </td>\n      <td>\n        <input name=\"remaining_time\" id=\"remaining_time\"\n               value=\"";
+#line 1007 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'remaining_time', 0]) });
+        $output .=  "\"\n               size=\"6\" maxlength=\"6\" onchange=\"updateRemainingTime();\">\n      </td>\n      <td>";
+#line 1012 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('calculatepercentage', { 'act' => $stash->get(['bug', 0, 'actual_time', 0]), 'rem' => $stash->get(['bug', 0, 'remaining_time', 0]) });
+        $output .=  "\n      </td>\n      <td>";
+#line 1016 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('formattimeunit', { 'time_unit' => $stash->get(['bug', 0, 'estimated_time', 0]) - ($stash->get(['bug', 0, 'actual_time', 0]) + $stash->get(['bug', 0, 'remaining_time', 0])) });
+        $output .=  "\n      </td>\n       <td>";
+#line 1019 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'deadline', 0]), 'value' => $stash->get(['bug', 0, 'deadline', 0]), 'no_tds' => 1, 'editable' => $stash->get(['bug', 0, 'check_can_change_field', [ 'deadline', 0, 1 ]]) });
+        $output .=  "\n      </td>        \n    </tr>\n    <tr>\n      <td colspan=\"7\" class=\"bz_summarize_time\">\n        <a href=\"summarize_time.cgi?id=";
+#line 1026 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+        $output .=  "&amp;do_depends=1\">\n        Summarize time (including time for ";
+#line 1027 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bugs', 0]);
+        $output .=  "\n        blocking this ";
+#line 1028 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  ")</a>\n      </td>\n    </tr>\n  </table> ";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'section_title' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  ";
+        $output .=  "\n  <div class=\"bz_alias_short_desc_container edit_form\">";
+#line 166 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('commit_button', { 'id' => '_top' });
+        $output .=  "\n     <a href=\"show_bug.cgi?id=";
+#line 167 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+        $output .=  "\">";
+        
+        $output .=  "<b>";
+#line 168 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
+        $output .=  "&nbsp;";
+#line 168 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'bug_id', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</b>";
+        
+        $output .=  "</a> -<span id=\"summary_alias_container\" class=\"bz_default_hidden\"> ";
+#line 172 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'alias', 0]) ne '') {
+        $output .=  "\n        (<span id=\"alias_nonedit_display\">";
+#line 171 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'alias', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</span>) ";
+        }
+        
+        $output .=  "\n      <span id=\"short_desc_nonedit_display\">";
+#line 173 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('quoteUrls', [ $stash->get('bug') ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</span>";
+#line 177 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'short_desc', 0, 1 ]]) || $stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]])) {
+        $output .=  "\n        <small class=\"editme\">(<a href=\"#\" id=\"editme_action\">edit</a>)</small>";
+        }
+        
+        $output .=  "\n     </span>\n  \n       \n    <div id=\"summary_alias_input\">\n      <table id=\"summary\"> \n        <tr>";
+#line 194 "template/en/default/bug/edit.html.tmpl"
+        if ($stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]])) {
+        $output .=  "      ";
+#line 185 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'alias', 0]), 'editable' => 1 });
+        $output .=  "\n            <td>";
+        }
+        elsif ($stash->get(['bug', 0, 'alias', 0])) {
+        $output .=  "\n            <td colspan=\"2\">(";
+        }
+        else {
+        $output .=  "\n            <td colspan=\"2\">";
+        }
+        
+#line 195 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('input', { 'inputname' => 'alias', 'size' => '20', 'maxlength' => '20', 'no_td' => 1 });
+#line 199 "template/en/default/bug/edit.html.tmpl"
+        if (! $stash->get(['bug', 0, 'check_can_change_field', [ 'alias', 0, 1 ]]) && $stash->get(['bug', 0, 'alias', 0])) {
+        $output .=  ')';
+        }
+        
+        $output .=  "\n          </td>\n        </tr>\n        ";
+        $output .=  "\n        <tr>";
+#line 205 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->include('bug/field-label.html.tmpl', { 'field' => $stash->get(['bug_fields', 0, 'short_desc', 0]), 'editable' => 1, 'accesskey' => 's' });
+        $output .=  "\n          <td>";
+#line 211 "template/en/default/bug/edit.html.tmpl"
+        $output .=  $context->process('input', { 'inputname' => 'short_desc', 'size' => '80', 'colspan' => 2, 'maxlength' => 255, 'spellcheck' => 'true', 'no_td' => 1 });
+        $output .=  "\n          </td>\n        </tr>\n      </table>\n    </div>\n  </div>\n  <script type=\"text/javascript\">\n    hideAliasAndSummary('";
+#line 219 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "', '";
+#line 219 "template/en/default/bug/edit.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('js')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'alias', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "');\n  </script>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

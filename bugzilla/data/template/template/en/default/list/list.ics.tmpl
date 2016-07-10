@@ -262,6 +262,45 @@ Template::Document->new({
         
             return $output;
         },
+        'ics_dtstamp' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 60 "template/en/default/list/list.ics.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('ics', [ 'DTSTAMP' ])
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('time', [ '%Y%m%dT%H%M%SZ', 'UTC' ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('currenttime');
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'ics_status' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -380,72 +419,36 @@ Template::Document->new({
         
             return $output;
         },
-        'ics_dtstart' => sub {
+        'ics_summary' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 56 "template/en/default/list/list.ics.tmpl"
+#line 88 "template/en/default/list/list.ics.tmpl"
+        if ($stash->get(['bug', 0, 'short_desc', 0])) {
+#line 83 "template/en/default/list/list.ics.tmpl"
+        $stash->set('summary', $stash->get(['bug', 0, 'short_desc', 0]));
+        }
+        elsif ($stash->get(['bug', 0, 'short_short_desc', 0])) {
+#line 85 "template/en/default/list/list.ics.tmpl"
+        $stash->set('summary', $stash->get(['bug', 0, 'short_short_desc', 0]));
+        }
+        else {
+#line 1 "template/en/default/list/list.ics.tmpl"
+        $stash->set('summary', ($stash->get(['terms', 0, 'Bug', 0]) . " " . $stash->get(['bug', 0, 'bug_id', 0])));
+        }
+        
+#line 89 "template/en/default/list/list.ics.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('ics', [ 'DTSTART' ])
+            my $_tt_filter = $context->filter('ics', [ 'SUMMARY' ])
                       || $context->throw($context->error);
         
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('time', [ '%Y%m%dT%H%M%SZ', 'UTC' ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'opentime', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'ics_dtstamp' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 60 "template/en/default/list/list.ics.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('ics', [ 'DTSTAMP' ])
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('time', [ '%Y%m%dT%H%M%SZ', 'UTC' ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('currenttime');
-            
-            &$_tt_filter($output);
-        };
-        
+        $output .=  $stash->get('summary');
             
             &$_tt_filter($output);
         };
@@ -497,36 +500,33 @@ Template::Document->new({
         
             return $output;
         },
-        'ics_summary' => sub {
+        'ics_dtstart' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 88 "template/en/default/list/list.ics.tmpl"
-        if ($stash->get(['bug', 0, 'short_desc', 0])) {
-#line 83 "template/en/default/list/list.ics.tmpl"
-        $stash->set('summary', $stash->get(['bug', 0, 'short_desc', 0]));
-        }
-        elsif ($stash->get(['bug', 0, 'short_short_desc', 0])) {
-#line 85 "template/en/default/list/list.ics.tmpl"
-        $stash->set('summary', $stash->get(['bug', 0, 'short_short_desc', 0]));
-        }
-        else {
-#line 1 "template/en/default/list/list.ics.tmpl"
-        $stash->set('summary', ($stash->get(['terms', 0, 'Bug', 0]) . " " . $stash->get(['bug', 0, 'bug_id', 0])));
-        }
-        
-#line 89 "template/en/default/list/list.ics.tmpl"
+#line 56 "template/en/default/list/list.ics.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('ics', [ 'SUMMARY' ])
+            my $_tt_filter = $context->filter('ics', [ 'DTSTART' ])
                       || $context->throw($context->error);
         
-        $output .=  $stash->get('summary');
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('time', [ '%Y%m%dT%H%M%SZ', 'UTC' ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'opentime', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
             
             &$_tt_filter($output);
         };

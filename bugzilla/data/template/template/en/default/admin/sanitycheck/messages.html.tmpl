@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'admin/sanitycheck/messages.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'admin/sanitycheck/messages.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -1244,6 +1244,53 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'bug_link' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <a href=\"show_bug.cgi?id=";
+#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('uri')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('bug_id');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">";
+#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " ";
+#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('bug_id');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</a>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'bug_list' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -1331,53 +1378,6 @@ Template::Document->new({
 #line 307 "template/en/default/admin/sanitycheck/messages.html.tmpl"
         $output .=  $stash->get(['terms', 0, 'bug', 0]);
         $output .=  " list</a>).";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'bug_link' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <a href=\"show_bug.cgi?id=";
-#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('uri')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('bug_id');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">";
-#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " ";
-#line 311 "template/en/default/admin/sanitycheck/messages.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('bug_id');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</a>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

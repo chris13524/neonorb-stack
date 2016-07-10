@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'whine/schedule.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'whine/schedule.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -552,6 +552,69 @@ Template::Document->new({
         
             return $output;
         },
+        'time_field' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n<select name=\"time_";
+#line 389 "template/en/default/whine/schedule.html.tmpl"
+        $output .=  $stash->get(['schedule', 0, 'id', 0]);
+        $output .=  "\">\n";
+#line 391 "template/en/default/whine/schedule.html.tmpl"
+        $stash->set('options', [ [ '0', 'at midnight' ], [ '1', 'at 01:00' ], [ '2', 'at 02:00' ], [ '3', 'at 03:00' ], [ '4', 'at 04:00' ], [ '5', 'at 05:00' ], [ '6', 'at 06:00' ], [ '7', 'at 07:00' ], [ '8', 'at 08:00' ], [ '9', 'at 09:00' ], [ '10', 'at 10:00' ], [ '11', 'at 11:00' ], [ '12', 'at 12:00' ], [ '13', 'at 13:00' ], [ '14', 'at 14:00' ], [ '15', 'at 15:00' ], [ '16', 'at 16:00' ], [ '17', 'at 17:00' ], [ '18', 'at 18:00' ], [ '19', 'at 19:00' ], [ '20', 'at 20:00' ], [ '21', 'at 21:00' ], [ '22', 'at 22:00' ], [ '23', 'at 23:00' ], [ '60min', 'every hour' ], [ '30min', 'every 30 minutes' ], [ '15min', 'every 15 minutes' ] ]);
+        $output .=  "\n";
+#line 428 "template/en/default/whine/schedule.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get('options');
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'option'} = $_tt_value;
+        $output .=  "\n        <option value=\"";
+#line 424 "template/en/default/whine/schedule.html.tmpl"
+        $output .=  $stash->get(['option', 0, 0, 0]);
+        $output .=  "\" ";
+#line 425 "template/en/default/whine/schedule.html.tmpl"
+        if ($stash->get('val') eq $stash->get(['option', 0, 0, 0])) {
+        $output .=  " selected";
+        }
+        
+        $output .=  ">";
+#line 426 "template/en/default/whine/schedule.html.tmpl"
+        $output .=  $stash->get(['option', 0, 1, 0]);
+        $output .=  "        </option>";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+        $output .=  "\n\n</select>\n\n";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'query_field' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -635,69 +698,6 @@ Template::Document->new({
         }
         
         $output .=  "\n\n";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'time_field' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n<select name=\"time_";
-#line 389 "template/en/default/whine/schedule.html.tmpl"
-        $output .=  $stash->get(['schedule', 0, 'id', 0]);
-        $output .=  "\">\n";
-#line 391 "template/en/default/whine/schedule.html.tmpl"
-        $stash->set('options', [ [ '0', 'at midnight' ], [ '1', 'at 01:00' ], [ '2', 'at 02:00' ], [ '3', 'at 03:00' ], [ '4', 'at 04:00' ], [ '5', 'at 05:00' ], [ '6', 'at 06:00' ], [ '7', 'at 07:00' ], [ '8', 'at 08:00' ], [ '9', 'at 09:00' ], [ '10', 'at 10:00' ], [ '11', 'at 11:00' ], [ '12', 'at 12:00' ], [ '13', 'at 13:00' ], [ '14', 'at 14:00' ], [ '15', 'at 15:00' ], [ '16', 'at 16:00' ], [ '17', 'at 17:00' ], [ '18', 'at 18:00' ], [ '19', 'at 19:00' ], [ '20', 'at 20:00' ], [ '21', 'at 21:00' ], [ '22', 'at 22:00' ], [ '23', 'at 23:00' ], [ '60min', 'every hour' ], [ '30min', 'every 30 minutes' ], [ '15min', 'every 15 minutes' ] ]);
-        $output .=  "\n";
-#line 428 "template/en/default/whine/schedule.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get('options');
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'option'} = $_tt_value;
-        $output .=  "\n        <option value=\"";
-#line 424 "template/en/default/whine/schedule.html.tmpl"
-        $output .=  $stash->get(['option', 0, 0, 0]);
-        $output .=  "\" ";
-#line 425 "template/en/default/whine/schedule.html.tmpl"
-        if ($stash->get('val') eq $stash->get(['option', 0, 0, 0])) {
-        $output .=  " selected";
-        }
-        
-        $output .=  ">";
-#line 426 "template/en/default/whine/schedule.html.tmpl"
-        $output .=  $stash->get(['option', 0, 1, 0]);
-        $output .=  "        </option>";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
-        $output .=  "\n\n</select>\n\n";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

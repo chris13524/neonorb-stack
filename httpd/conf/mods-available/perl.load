@@ -1,1 +1,0 @@
-LoadModule perl_module /usr/local/apache2/modules/mod_perl.so

@@ -82,88 +82,119 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'buginfo' => sub {
+        'depthControlToolbar' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 155 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ 'bug_status', $stash->get(['bug', 0, 'bug_status', 0]) ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-#line 156 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['bug', 0, 'resolution', 0])) {
-        $output .=  " ";
-#line 156 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ 'resolution', $stash->get(['bug', 0, 'resolution', 0]) ]]);
-            
-            &$_tt_filter($output);
-        };
-        
+        $output .=  "\n <table cellpadding=\"3\" border=\"0\" cellspacing=\"0\" bgcolor=\"#e0e0e0\">\n   <tr>\n   ";
+        $output .=  "\n   <td align=\"center\">\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n           style=\"display: inline; margin: 0px;\">\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 175 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">";
+#line 178 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('maxdepth')) {
+        $output .=  "\n       <input name=\"maxdepth\" type=\"hidden\" value=\"";
+#line 177 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('maxdepth');
+        $output .=  "\">";
         }
         
-        $output .=  ";";
-        $output .=  " assigned to ";
-#line 157 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-#line 160 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['Param', [ 'usetargetmilestone' ]]) && $stash->get(['bug', 0, 'target_milestone', 0])) {
-        $output .=  "; target: ";
-#line 159 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'target_milestone', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
+        $output .=  "\n     <input type=\"hidden\" name=\"hide_resolved\" value=\"";
+#line 179 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved') ? 0 : 1;
+        $output .=  "\">\n     <input type=\"submit\" id=\"toggle_visibility\"\n            value=\"";
+#line 181 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('hide_resolved')) {
+        $output .=  "Show";
+        }
+        else {
+        $output .=  "Hide";
         }
         
+        $output .=  " Resolved\">\n   </form>\n   </td>\n\n   <td>\n     Max Depth:\n   </td>\n\n   <td>\n     &nbsp;\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
+        $output .=  "\n     <input type=\"submit\" id=\"change_maxdepth\"\n       value=\"&nbsp;1&nbsp;\" ";
+#line 199 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('realdepth') < 2 || $stash->get('maxdepth') eq 1) {
+        $output .=  'disabled';
+        }
+        
+        $output .=  ">\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 200 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">\n     <input name=\"maxdepth\" type=\"hidden\" value=\"1\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
+#line 202 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved');
+        $output .=  "\">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
+        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 211 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">\n     <input name=\"maxdepth\" type=\"hidden\" value=\"";
+#line 212 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('maxdepth') eq 1 ? 1 : ($stash->get('maxdepth') ? $stash->get('maxdepth') - 1 : $stash->get('realdepth') - 1);
+        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
+#line 216 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved');
+        $output .=  "\">\n     <input type=\"submit\" id=\"decrease_depth\" value=\"&nbsp;&lt;&nbsp;\"";
+#line 218 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('realdepth') < 2 || ($stash->get('maxdepth') && $stash->get('maxdepth') < 2)) {
+        $output .=  'disabled';
+        }
+        
+        $output .=  ">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
+        $output .=  "\n     <input name=\"maxdepth\" size=\"4\" maxlength=\"4\" value=\"";
+#line 227 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('maxdepth') > 0 && $stash->get('maxdepth') <= $stash->get('realdepth') ? $stash->get('maxdepth') : '';
+        $output .=  "\">\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 230 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
+#line 231 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved');
+        $output .=  "\">\n     <noscript>\n       <input type=\"submit\" id=\"change_depth\" value=\"Change\"";
+#line 234 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('realdepth') < 2) {
+        $output .=  'disabled';
+        }
+        
+        $output .=  ">\n     </noscript>\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
+        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 244 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">";
+#line 247 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('maxdepth')) {
+        $output .=  "\n       <input name=\"maxdepth\" type=\"hidden\" value=\"";
+#line 246 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('maxdepth') + 1;
+        $output .=  "\">";
+        }
+        
+        $output .=  "\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
+#line 248 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved');
+        $output .=  "\">\n     <input type=\"submit\" id=\"increase_depth\" value=\"&nbsp;&gt;&nbsp;\" ";
+#line 250 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('realdepth') < 2 || ! $stash->get('maxdepth') || $stash->get('maxdepth') >= $stash->get('realdepth')) {
+        $output .=  'disabled';
+        }
+        
+        $output .=  ">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
+        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
+#line 258 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
+#line 259 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('hide_resolved');
+        $output .=  "\">\n     <input type=\"submit\" id=\"remove_limit\"\n       value=\"&nbsp;Unlimited&nbsp;\"";
+#line 262 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get('maxdepth') eq 0 || $stash->get('maxdepth') eq $stash->get('realdepth')) {
+        $output .=  'disabled';
+        }
+        
+        $output .=  ">\n   </form>\n   </td>\n </tr>\n</table>\n";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -309,119 +340,85 @@ Template::Document->new({
         
             return $output;
         },
-        'depthControlToolbar' => sub {
+        'buglink' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-        $output .=  "\n <table cellpadding=\"3\" border=\"0\" cellspacing=\"0\" bgcolor=\"#e0e0e0\">\n   <tr>\n   ";
-        $output .=  "\n   <td align=\"center\">\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n           style=\"display: inline; margin: 0px;\">\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 175 "template/en/default/bug/dependency-tree.html.tmpl"
+#line 138 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('isclosed', ! $stash->get(['bug', 0, 'isopened', 0]));
+#line 151 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('closed', [ $stash->get('isclosed') ])
+                      || $context->throw($context->error);
+        
+        $output .=  "    <a title=\"";
+#line 140 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $context->include('buginfo', { 'bug' => $stash->get('bug') });
+        $output .=  "\"\n       href=\"show_bug.cgi?id=";
+#line 141 "template/en/default/bug/dependency-tree.html.tmpl"
         $output .=  $stash->get('bugid');
-        $output .=  "\">";
-#line 178 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('maxdepth')) {
-        $output .=  "\n       <input name=\"maxdepth\" type=\"hidden\" value=\"";
-#line 177 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('maxdepth');
-        $output .=  "\">";
-        }
-        
-        $output .=  "\n     <input type=\"hidden\" name=\"hide_resolved\" value=\"";
-#line 179 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved') ? 0 : 1;
-        $output .=  "\">\n     <input type=\"submit\" id=\"toggle_visibility\"\n            value=\"";
-#line 181 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('hide_resolved')) {
-        $output .=  "Show";
-        }
-        else {
-        $output .=  "Hide";
-        }
-        
-        $output .=  " Resolved\">\n   </form>\n   </td>\n\n   <td>\n     Max Depth:\n   </td>\n\n   <td>\n     &nbsp;\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
-        $output .=  "\n     <input type=\"submit\" id=\"change_maxdepth\"\n       value=\"&nbsp;1&nbsp;\" ";
-#line 199 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('realdepth') < 2 || $stash->get('maxdepth') eq 1) {
-        $output .=  'disabled';
-        }
-        
-        $output .=  ">\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 200 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  "\">\n      <b>";
+#line 142 "template/en/default/bug/dependency-tree.html.tmpl"
         $output .=  $stash->get('bugid');
-        $output .=  "\">\n     <input name=\"maxdepth\" type=\"hidden\" value=\"1\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
-#line 202 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved');
-        $output .=  "\">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
-        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 211 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  ":</b>\n      <span class=\"summ_text\">";
+#line 143 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</span>\n      <span class=\"summ_info\">[";
+#line 144 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $context->include('buginfo');
+        $output .=  "]</span>\n    </a>\n    <a href=\"showdependencytree.cgi?id=";
+#line 146 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('uri')
+                      || $context->throw($context->error);
+        
         $output .=  $stash->get('bugid');
-        $output .=  "\">\n     <input name=\"maxdepth\" type=\"hidden\" value=\"";
-#line 212 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('maxdepth') eq 1 ? 1 : ($stash->get('maxdepth') ? $stash->get('maxdepth') - 1 : $stash->get('realdepth') - 1);
-        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
-#line 216 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved');
-        $output .=  "\">\n     <input type=\"submit\" id=\"decrease_depth\" value=\"&nbsp;&lt;&nbsp;\"";
-#line 218 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('realdepth') < 2 || ($stash->get('maxdepth') && $stash->get('maxdepth') < 2)) {
-        $output .=  'disabled';
-        }
+            
+            &$_tt_filter($output);
+        };
         
-        $output .=  ">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
-        $output .=  "\n     <input name=\"maxdepth\" size=\"4\" maxlength=\"4\" value=\"";
-#line 227 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('maxdepth') > 0 && $stash->get('maxdepth') <= $stash->get('realdepth') ? $stash->get('maxdepth') : '';
-        $output .=  "\">\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 230 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  "\"\n       class=\"tree_link\">\n      <img src=\"skins/standard/dependency-tree/tree.png\"\n           title=\"See dependency tree for ";
+#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " ";
+#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
         $output .=  $stash->get('bugid');
-        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
-#line 231 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved');
-        $output .=  "\">\n     <noscript>\n       <input type=\"submit\" id=\"change_depth\" value=\"Change\"";
-#line 234 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('realdepth') < 2) {
-        $output .=  'disabled';
-        }
+            
+            &$_tt_filter($output);
+        };
         
-        $output .=  ">\n     </noscript>\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
-        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 244 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\">";
-#line 247 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('maxdepth')) {
-        $output .=  "\n       <input name=\"maxdepth\" type=\"hidden\" value=\"";
-#line 246 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('maxdepth') + 1;
-        $output .=  "\">";
-        }
+        $output .=  "\">\n    </a>";
+            
+            &$_tt_filter($output);
+        };
         
-        $output .=  "\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
-#line 248 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved');
-        $output .=  "\">\n     <input type=\"submit\" id=\"increase_depth\" value=\"&nbsp;&gt;&nbsp;\" ";
-#line 250 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('realdepth') < 2 || ! $stash->get('maxdepth') || $stash->get('maxdepth') >= $stash->get('realdepth')) {
-        $output .=  'disabled';
-        }
-        
-        $output .=  ">\n   </form>\n   </td>\n\n   <td>\n   <form method=\"get\" action=\"showdependencytree.cgi\"\n         style=\"display: inline; margin: 0px;\">\n     ";
-        $output .=  "\n     <input name=\"id\" type=\"hidden\" value=\"";
-#line 258 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\">\n     <input name=\"hide_resolved\" type=\"hidden\" value=\"";
-#line 259 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('hide_resolved');
-        $output .=  "\">\n     <input type=\"submit\" id=\"remove_limit\"\n       value=\"&nbsp;Unlimited&nbsp;\"";
-#line 262 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get('maxdepth') eq 0 || $stash->get('maxdepth') eq $stash->get('realdepth')) {
-        $output .=  'disabled';
-        }
-        
-        $output .=  ">\n   </form>\n   </td>\n </tr>\n</table>\n";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -430,54 +427,88 @@ Template::Document->new({
         
             return $output;
         },
-        'bullet' => sub {
+        'buginfo' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 130 "template/en/default/bug/dependency-tree.html.tmpl"
-        if ($stash->get(['tree', 0, 'dependencies', 0, $stash->get('bugid'), 0, 'size', 0]) && ! $stash->get(['global', 0, 'seen', 0, $stash->get('bugid'), 0])) {
-#line 128 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('extra_class', ' b_open');
-#line 129 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('extra_args', 'onclick="return doToggle(this, event)"');
+#line 155 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['display_value', [ 'bug_status', $stash->get(['bug', 0, 'bug_status', 0]) ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+#line 156 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['bug', 0, 'resolution', 0])) {
         $output .=  " ";
+#line 156 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['display_value', [ 'resolution', $stash->get(['bug', 0, 'resolution', 0]) ]]);
+            
+            &$_tt_filter($output);
+        };
+        
         }
         
-        $output .=  "\n  <a id=\"b";
-#line 131 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\" \n     class=\"b ";
-#line 132 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  ";";
+        $output .=  " assigned to ";
+#line 157 "template/en/default/bug/dependency-tree.html.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('none')
+            my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get('extra_class');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n     title=\"Click to expand or contract this portion of the tree. Hold down the Ctrl key while clicking to expand or contract all subtrees.\"";
-#line 134 "template/en/default/bug/dependency-tree.html.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('none')
+            my $_tt_filter = $context->filter('email')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get('extra_args');
+        $output .=  $stash->get(['bug', 0, 'assigned_to', 0, 'login', 0]);
             
             &$_tt_filter($output);
         };
         
-        $output .=  ">&nbsp;&nbsp;</a>";
+            
+            &$_tt_filter($output);
+        };
+        
+#line 160 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['Param', [ 'usetargetmilestone' ]]) && $stash->get(['bug', 0, 'target_milestone', 0])) {
+        $output .=  "; target: ";
+#line 159 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['bug', 0, 'target_milestone', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        }
+        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -640,85 +671,54 @@ Template::Document->new({
         
             return $output;
         },
-        'buglink' => sub {
+        'bullet' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 138 "template/en/default/bug/dependency-tree.html.tmpl"
-        $stash->set('isclosed', ! $stash->get(['bug', 0, 'isopened', 0]));
-#line 151 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('closed', [ $stash->get('isclosed') ])
-                      || $context->throw($context->error);
-        
-        $output .=  "    <a title=\"";
-#line 140 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $context->include('buginfo', { 'bug' => $stash->get('bug') });
-        $output .=  "\"\n       href=\"show_bug.cgi?id=";
-#line 141 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  "\">\n      <b>";
-#line 142 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get('bugid');
-        $output .=  ":</b>\n      <span class=\"summ_text\">";
-#line 143 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['bug', 0, 'short_desc', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</span>\n      <span class=\"summ_info\">[";
-#line 144 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $context->include('buginfo');
-        $output .=  "]</span>\n    </a>\n    <a href=\"showdependencytree.cgi?id=";
-#line 146 "template/en/default/bug/dependency-tree.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('uri')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('bugid');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"\n       class=\"tree_link\">\n      <img src=\"skins/standard/dependency-tree/tree.png\"\n           title=\"See dependency tree for ";
-#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+#line 130 "template/en/default/bug/dependency-tree.html.tmpl"
+        if ($stash->get(['tree', 0, 'dependencies', 0, $stash->get('bugid'), 0, 'size', 0]) && ! $stash->get(['global', 0, 'seen', 0, $stash->get('bugid'), 0])) {
+#line 128 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('extra_class', ' b_open');
+#line 129 "template/en/default/bug/dependency-tree.html.tmpl"
+        $stash->set('extra_args', 'onclick="return doToggle(this, event)"');
         $output .=  " ";
-#line 149 "template/en/default/bug/dependency-tree.html.tmpl"
+        }
+        
+        $output .=  "\n  <a id=\"b";
+#line 131 "template/en/default/bug/dependency-tree.html.tmpl"
+        $output .=  $stash->get('bugid');
+        $output .=  "\" \n     class=\"b ";
+#line 132 "template/en/default/bug/dependency-tree.html.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('html')
+            my $_tt_filter = $context->filter('none')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get('bugid');
+        $output .=  $stash->get('extra_class');
             
             &$_tt_filter($output);
         };
         
-        $output .=  "\">\n    </a>";
+        $output .=  "\"\n     title=\"Click to expand or contract this portion of the tree. Hold down the Ctrl key while clicking to expand or contract all subtrees.\"";
+#line 134 "template/en/default/bug/dependency-tree.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('extra_args');
             
             &$_tt_filter($output);
         };
         
+        $output .=  ">&nbsp;&nbsp;</a>";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

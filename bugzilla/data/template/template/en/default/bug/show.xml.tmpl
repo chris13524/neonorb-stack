@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'modtime' => '1422386282',
         'name' => 'bug/show.xml.tmpl',
+        'modtime' => '1422386282',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -657,6 +657,175 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'bug_field' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 103 "template/en/default/bug/show.xml.tmpl"
+        $stash->set('field_values', $stash->get(['bug', 0, $stash->get('field'), 0]));
+        $output .=  "\n  ";
+#line 107 "template/en/default/bug/show.xml.tmpl"
+        if ($stash->get(['bug', 0, $stash->get('field'), 0, 'size', 0]) eq 1) {
+#line 106 "template/en/default/bug/show.xml.tmpl"
+        $stash->set('field_values', [ $stash->get(['bug', 0, $stash->get('field'), 0, 'first', 0]) ]);
+        }
+        
+        $output .=  "\n";
+#line 127 "template/en/default/bug/show.xml.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get('field_values');
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'val'} = $_tt_value;
+        $output .=  "\n    ";
+#line 113 "template/en/default/bug/show.xml.tmpl"
+        $stash->set('name', '');
+#line 124 "template/en/default/bug/show.xml.tmpl"
+        if ($stash->get('field') eq 'reporter' || $stash->get('field') eq 'assigned_to' || $stash->get('field') eq 'qa_contact') {
+#line 116 "template/en/default/bug/show.xml.tmpl"
+        $stash->set('name', $stash->get(['val', 0, 'name', 0]));
+#line 117 "template/en/default/bug/show.xml.tmpl"
+        
+        # CAPTURE
+        $stash->set('val', do {
+            my $output = '';
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['val', 0, 'email', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            $output;
+        });
+        
+        }
+        elsif ($stash->get('field') eq 'cc') {
+#line 119 "template/en/default/bug/show.xml.tmpl"
+        
+        # CAPTURE
+        $stash->set('val', do {
+            my $output = '';
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('val');
+            
+            &$_tt_filter($output);
+        };
+        
+            $output;
+        });
+        
+        }
+        elsif ($stash->get('field') eq 'creation_ts' || $stash->get('field') eq 'delta_ts') {
+#line 121 "template/en/default/bug/show.xml.tmpl"
+        
+        # CAPTURE
+        $stash->set('val', do {
+            my $output = '';
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('time', [ '%Y-%m-%d %T %z' ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('val');
+            
+            &$_tt_filter($output);
+        };
+        
+            $output;
+        });
+        
+        }
+        elsif ($stash->get('field') eq 'see_also') {
+#line 123 "template/en/default/bug/show.xml.tmpl"
+        $stash->set('val', $stash->get(['val', 0, 'name', 0]));
+        }
+        
+        $output .=  "\n    <";
+#line 125 "template/en/default/bug/show.xml.tmpl"
+        $output .=  $stash->get('field');
+#line 125 "template/en/default/bug/show.xml.tmpl"
+        if ($stash->get('name') ne '') {
+        $output .=  " name=\"";
+#line 125 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('name');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\"";
+        }
+        
+        $output .=  ">";
+#line 126 "template/en/default/bug/show.xml.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('xml')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('val');
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</";
+#line 126 "template/en/default/bug/show.xml.tmpl"
+        $output .=  $stash->get('field');
+        $output .=  ">";;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'section_flags' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -991,175 +1160,6 @@ Template::Document->new({
         };
         
         $output .=  "</thetext>\n  </long_desc>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'bug_field' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 103 "template/en/default/bug/show.xml.tmpl"
-        $stash->set('field_values', $stash->get(['bug', 0, $stash->get('field'), 0]));
-        $output .=  "\n  ";
-#line 107 "template/en/default/bug/show.xml.tmpl"
-        if ($stash->get(['bug', 0, $stash->get('field'), 0, 'size', 0]) eq 1) {
-#line 106 "template/en/default/bug/show.xml.tmpl"
-        $stash->set('field_values', [ $stash->get(['bug', 0, $stash->get('field'), 0, 'first', 0]) ]);
-        }
-        
-        $output .=  "\n";
-#line 127 "template/en/default/bug/show.xml.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get('field_values');
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'val'} = $_tt_value;
-        $output .=  "\n    ";
-#line 113 "template/en/default/bug/show.xml.tmpl"
-        $stash->set('name', '');
-#line 124 "template/en/default/bug/show.xml.tmpl"
-        if ($stash->get('field') eq 'reporter' || $stash->get('field') eq 'assigned_to' || $stash->get('field') eq 'qa_contact') {
-#line 116 "template/en/default/bug/show.xml.tmpl"
-        $stash->set('name', $stash->get(['val', 0, 'name', 0]));
-#line 117 "template/en/default/bug/show.xml.tmpl"
-        
-        # CAPTURE
-        $stash->set('val', do {
-            my $output = '';
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['val', 0, 'email', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            $output;
-        });
-        
-        }
-        elsif ($stash->get('field') eq 'cc') {
-#line 119 "template/en/default/bug/show.xml.tmpl"
-        
-        # CAPTURE
-        $stash->set('val', do {
-            my $output = '';
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('val');
-            
-            &$_tt_filter($output);
-        };
-        
-            $output;
-        });
-        
-        }
-        elsif ($stash->get('field') eq 'creation_ts' || $stash->get('field') eq 'delta_ts') {
-#line 121 "template/en/default/bug/show.xml.tmpl"
-        
-        # CAPTURE
-        $stash->set('val', do {
-            my $output = '';
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('time', [ '%Y-%m-%d %T %z' ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('val');
-            
-            &$_tt_filter($output);
-        };
-        
-            $output;
-        });
-        
-        }
-        elsif ($stash->get('field') eq 'see_also') {
-#line 123 "template/en/default/bug/show.xml.tmpl"
-        $stash->set('val', $stash->get(['val', 0, 'name', 0]));
-        }
-        
-        $output .=  "\n    <";
-#line 125 "template/en/default/bug/show.xml.tmpl"
-        $output .=  $stash->get('field');
-#line 125 "template/en/default/bug/show.xml.tmpl"
-        if ($stash->get('name') ne '') {
-        $output .=  " name=\"";
-#line 125 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('name');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\"";
-        }
-        
-        $output .=  ">";
-#line 126 "template/en/default/bug/show.xml.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('xml')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('val');
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</";
-#line 126 "template/en/default/bug/show.xml.tmpl"
-        $output .=  $stash->get('field');
-        $output .=  ">";;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
-        };
-        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

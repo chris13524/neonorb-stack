@@ -6,8 +6,8 @@ use utf8;
 
 Template::Document->new({
     METADATA => {
-        'name' => 'attachment/diff-header.html.tmpl',
         'modtime' => '1422386282',
+        'name' => 'attachment/diff-header.html.tmpl',
     },
     BLOCK => sub {
         my $context = shift || die "template sub called without context\n";
@@ -568,24 +568,6 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'diffurl' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 23 "template/en/default/attachment/diff-header.html.tmpl"
-        $output .=  $context->process('viewurl');
-        $output .=  "&amp;action=diff";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
         'viewurl' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -614,6 +596,24 @@ Template::Document->new({
 #line 22 "template/en/default/attachment/diff-header.html.tmpl"
         $output .=  $context->process('viewurl');
         $output .=  "&amp;action=edit";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'diffurl' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 23 "template/en/default/attachment/diff-header.html.tmpl"
+        $output .=  $context->process('viewurl');
+        $output .=  "&amp;action=diff";
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

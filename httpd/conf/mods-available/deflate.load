@@ -1,2 +1,0 @@
-# Depends: filter
-LoadModule deflate_module /usr/local/apache2/modules/mod_deflate.so

@@ -119,7 +119,7 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'row' => sub {
+        'dependencies' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
@@ -127,7 +127,10 @@ Template::Document->new({
             
             eval { BLOCK: {
         $output .=  "\n  <tr>\n    <th>";
-#line 303 "template/en/default/bug/show-multiple.html.tmpl"
+#line 317 "template/en/default/bug/show-multiple.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
+        $output .=  " ";
+#line 317 "template/en/default/bug/show-multiple.html.tmpl"
         
         # FILTER
         $output .=  do {
@@ -135,40 +138,72 @@ Template::Document->new({
             my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['field_descs', 0, $stash->get('cell'), 0]);
+        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
             
             &$_tt_filter($output);
         };
         
-        $output .=  ":</th>\n    <td";
-#line 304 "template/en/default/bug/show-multiple.html.tmpl"
-        if ($stash->get('fullrow')) {
-        $output .=  ' colspan=3';
+        $output .=  ":</th>\n    <td>";
+#line 321 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FOREACH 
+        do {
+            my ($_tt_value, $_tt_error, $_tt_oldloop);
+            my $_tt_list = $stash->get(['bug', 0, $stash->get('name'), 0]);
+            
+            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
+                $_tt_list = Template::Config->iterator($_tt_list)
+                    || die $Template::Config::ERROR, "\n"; 
+            }
+        
+            ($_tt_value, $_tt_error) = $_tt_list->get_first();
+            eval { $_tt_oldloop = $stash->get('loop') };
+            $stash->set('loop', $_tt_list);
+            eval {
+        FOR1:   while (! $_tt_error) {
+                    $stash->{'depbug'} = $_tt_value;
+#line 320 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('none')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('bug_link', [ $stash->get('depbug') ])
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get('depbug');
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+#line 320 "template/en/default/bug/show-multiple.html.tmpl"
+        if (! $stash->get(['loop', 0, 'last', 0])) {
+        $output .=  ', ';
         }
-        
-        $output .=  ">";
-#line 304 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['display_value', [ $stash->get('cell'), $stash->get(['bug', 0, $stash->get('cell'), 0]) ]]);
-            
-            &$_tt_filter($output);
+        ;
+                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
+                }
+            };
+            $stash->set('loop', $_tt_oldloop);
+            die $@ if $@;
+            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
+            die $_tt_error if $_tt_error;
         };
         
-        $output .=  "</td>";
-#line 305 "template/en/default/bug/show-multiple.html.tmpl"
-        if (! $stash->get('fullrow')) {
+        $output .=  "\n    </td>\n";
+#line 324 "template/en/default/bug/show-multiple.html.tmpl"
         $output .=  $context->process('rightcell');
-        }
-        
         $output .=  "\n  </tr>";
-#line 307 "template/en/default/bug/show-multiple.html.tmpl"
-        $stash->set('fullrow', 0);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -1167,7 +1202,7 @@ Template::Document->new({
         
             return $output;
         },
-        'dependencies' => sub {
+        'row' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
@@ -1175,10 +1210,7 @@ Template::Document->new({
             
             eval { BLOCK: {
         $output .=  "\n  <tr>\n    <th>";
-#line 317 "template/en/default/bug/show-multiple.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'Bug', 0]);
-        $output .=  " ";
-#line 317 "template/en/default/bug/show-multiple.html.tmpl"
+#line 303 "template/en/default/bug/show-multiple.html.tmpl"
         
         # FILTER
         $output .=  do {
@@ -1186,72 +1218,40 @@ Template::Document->new({
             my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['field_descs', 0, $stash->get('name'), 0]);
+        $output .=  $stash->get(['field_descs', 0, $stash->get('cell'), 0]);
             
             &$_tt_filter($output);
         };
         
-        $output .=  ":</th>\n    <td>";
-#line 321 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FOREACH 
-        do {
-            my ($_tt_value, $_tt_error, $_tt_oldloop);
-            my $_tt_list = $stash->get(['bug', 0, $stash->get('name'), 0]);
-            
-            unless (UNIVERSAL::isa($_tt_list, 'Template::Iterator')) {
-                $_tt_list = Template::Config->iterator($_tt_list)
-                    || die $Template::Config::ERROR, "\n"; 
-            }
-        
-            ($_tt_value, $_tt_error) = $_tt_list->get_first();
-            eval { $_tt_oldloop = $stash->get('loop') };
-            $stash->set('loop', $_tt_list);
-            eval {
-        FOR1:   while (! $_tt_error) {
-                    $stash->{'depbug'} = $_tt_value;
-#line 320 "template/en/default/bug/show-multiple.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('none')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('bug_link', [ $stash->get('depbug') ])
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get('depbug');
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-#line 320 "template/en/default/bug/show-multiple.html.tmpl"
-        if (! $stash->get(['loop', 0, 'last', 0])) {
-        $output .=  ', ';
+        $output .=  ":</th>\n    <td";
+#line 304 "template/en/default/bug/show-multiple.html.tmpl"
+        if ($stash->get('fullrow')) {
+        $output .=  ' colspan=3';
         }
-        ;
-                    ($_tt_value, $_tt_error) = $_tt_list->get_next();
-                }
-            };
-            $stash->set('loop', $_tt_oldloop);
-            die $@ if $@;
-            $_tt_error = 0 if $_tt_error && $_tt_error eq Template::Constants::STATUS_DONE;
-            die $_tt_error if $_tt_error;
+        
+        $output .=  ">";
+#line 304 "template/en/default/bug/show-multiple.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['display_value', [ $stash->get('cell'), $stash->get(['bug', 0, $stash->get('cell'), 0]) ]]);
+            
+            &$_tt_filter($output);
         };
         
-        $output .=  "\n    </td>\n";
-#line 324 "template/en/default/bug/show-multiple.html.tmpl"
+        $output .=  "</td>";
+#line 305 "template/en/default/bug/show-multiple.html.tmpl"
+        if (! $stash->get('fullrow')) {
         $output .=  $context->process('rightcell');
+        }
+        
         $output .=  "\n  </tr>";
+#line 307 "template/en/default/bug/show-multiple.html.tmpl"
+        $stash->set('fullrow', 0);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

@@ -536,65 +536,15 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
-        'display_requestee' => sub {
+        'display_status' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 246 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'requestee', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'display_type' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 223 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'type', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
+#line 227 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'status', 0]);
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);
@@ -637,6 +587,182 @@ Template::Document->new({
         else {
         $output .=  "\n    N/A";
         }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_bug' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  <a href=\"show_bug.cgi?id=";
+#line 231 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'bug_id', 0]);
+        $output .=  "\"";
+#line 232 "template/en/default/request/queue.html.tmpl"
+        if ($stash->get(['request', 0, 'restricted', 0])) {
+        $output .=  ' class="bz_secure"';
+        }
+        
+        $output .=  ">";
+#line 233 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['request', 0, 'bug_id', 0]);
+        $output .=  ": ";
+#line 233 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'bug_summary', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "</a>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_type' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 223 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'type', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_buglist' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+        $output .=  "\n  </table>";
+#line 259 "template/en/default/request/queue.html.tmpl"
+        if (!($stash->get(['buglist', 0, 'keys', 0, 'size', 0]))) {
+        next ;
+        }
+        
+        $output .=  "\n  <a href=\"buglist.cgi?bug_id=";
+#line 261 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['buglist', 0, 'keys', 0, 'nsort', 0, 'join', [ ',' ]]);
+            
+            &$_tt_filter($output);
+        };
+        
+        $output .=  "\">(view as\n  ";
+#line 262 "template/en/default/request/queue.html.tmpl"
+        $output .=  $stash->get(['terms', 0, 'bug', 0]);
+        $output .=  " list)</a>";
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_requestee' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 246 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('html')
+                      || $context->throw($context->error);
+        
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'requestee', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
+            
+            &$_tt_filter($output);
+        };
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
+        'display_created' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 254 "template/en/default/request/queue.html.tmpl"
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('time')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'created', 0]);
+            
+            &$_tt_filter($output);
+        };
         
             } };
             if ($@) {
@@ -731,22 +857,33 @@ Template::Document->new({
         
             return $output;
         },
-        'display_created' => sub {
+        'display_requester' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
             my $output  = '';
             my $_tt_error;
             
             eval { BLOCK: {
-#line 254 "template/en/default/request/queue.html.tmpl"
+#line 250 "template/en/default/request/queue.html.tmpl"
         
         # FILTER
         $output .=  do {
             my $output = '';
-            my $_tt_filter = $context->filter('time')
+            my $_tt_filter = $context->filter('html')
                       || $context->throw($context->error);
         
-        $output .=  $stash->get(['request', 0, 'created', 0]);
+        
+        # FILTER
+        $output .=  do {
+            my $output = '';
+            my $_tt_filter = $context->filter('email')
+                      || $context->throw($context->error);
+        
+        $output .=  $stash->get(['request', 0, 'requester', 0]);
+            
+            &$_tt_filter($output);
+        };
+        
             
             &$_tt_filter($output);
         };
@@ -820,143 +957,6 @@ Template::Document->new({
         $output .=  "];";
 #line 42 "template/en/default/request/queue.html.tmpl"
         $stash->set('n', $stash->get('n') + 1);
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'display_bug' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  <a href=\"show_bug.cgi?id=";
-#line 231 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'bug_id', 0]);
-        $output .=  "\"";
-#line 232 "template/en/default/request/queue.html.tmpl"
-        if ($stash->get(['request', 0, 'restricted', 0])) {
-        $output .=  ' class="bz_secure"';
-        }
-        
-        $output .=  ">";
-#line 233 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'bug_id', 0]);
-        $output .=  ": ";
-#line 233 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'bug_summary', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "</a>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'display_status' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 227 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['request', 0, 'status', 0]);
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'display_buglist' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-        $output .=  "\n  </table>";
-#line 259 "template/en/default/request/queue.html.tmpl"
-        if (!($stash->get(['buglist', 0, 'keys', 0, 'size', 0]))) {
-        next ;
-        }
-        
-        $output .=  "\n  <a href=\"buglist.cgi?bug_id=";
-#line 261 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['buglist', 0, 'keys', 0, 'nsort', 0, 'join', [ ',' ]]);
-            
-            &$_tt_filter($output);
-        };
-        
-        $output .=  "\">(view as\n  ";
-#line 262 "template/en/default/request/queue.html.tmpl"
-        $output .=  $stash->get(['terms', 0, 'bug', 0]);
-        $output .=  " list)</a>";
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'display_requester' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 250 "template/en/default/request/queue.html.tmpl"
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('html')
-                      || $context->throw($context->error);
-        
-        
-        # FILTER
-        $output .=  do {
-            my $output = '';
-            my $_tt_filter = $context->filter('email')
-                      || $context->throw($context->error);
-        
-        $output .=  $stash->get(['request', 0, 'requester', 0]);
-            
-            &$_tt_filter($output);
-        };
-        
-            
-            &$_tt_filter($output);
-        };
-        
             } };
             if ($@) {
                 $_tt_error = $context->catch($@, \$output);

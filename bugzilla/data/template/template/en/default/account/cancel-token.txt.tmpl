@@ -77,6 +77,37 @@ Template::Document->new({
         return $output;
     },
     DEFBLOCKS => {
+        'subject' => sub {
+            my $context = shift || die "template sub called without context\n";
+            my $stash   = $context->stash;
+            my $output  = '';
+            my $_tt_error;
+            
+            eval { BLOCK: {
+#line 38 "template/en/default/account/cancel-token.txt.tmpl"
+        if ($stash->get('tokentype') eq 'new_account') {
+        $output .=  "\n    User account creation request canceled";
+        }
+        elsif ($stash->get('tokentype') eq 'password') {
+        $output .=  "\n    Password change request canceled";
+        }
+        elsif ($stash->get('tokentype') eq 'emailnew' || $stash->get('tokentype') eq 'emailold') {
+        $output .=  "\n    Email change request canceled";
+        }
+        else {
+#line 37 "template/en/default/account/cancel-token.txt.tmpl"
+        $output .=  $stash->get('tokentype');
+        $output .=  " token canceled";
+        }
+        
+            } };
+            if ($@) {
+                $_tt_error = $context->catch($@, \$output);
+                die $_tt_error unless $_tt_error->type eq 'return';
+            }
+        
+            return $output;
+        },
         'cancelactionmessage' => sub {
             my $context = shift || die "template sub called without context\n";
             my $stash   = $context->stash;
@@ -151,37 +182,6 @@ Template::Document->new({
 #line 89 "template/en/default/account/cancel-token.txt.tmpl"
         $output .=  $stash->get(['Param', [ 'maintainer' ]]);
         $output .=  ".";
-        }
-        
-            } };
-            if ($@) {
-                $_tt_error = $context->catch($@, \$output);
-                die $_tt_error unless $_tt_error->type eq 'return';
-            }
-        
-            return $output;
-        },
-        'subject' => sub {
-            my $context = shift || die "template sub called without context\n";
-            my $stash   = $context->stash;
-            my $output  = '';
-            my $_tt_error;
-            
-            eval { BLOCK: {
-#line 38 "template/en/default/account/cancel-token.txt.tmpl"
-        if ($stash->get('tokentype') eq 'new_account') {
-        $output .=  "\n    User account creation request canceled";
-        }
-        elsif ($stash->get('tokentype') eq 'password') {
-        $output .=  "\n    Password change request canceled";
-        }
-        elsif ($stash->get('tokentype') eq 'emailnew' || $stash->get('tokentype') eq 'emailold') {
-        $output .=  "\n    Email change request canceled";
-        }
-        else {
-#line 37 "template/en/default/account/cancel-token.txt.tmpl"
-        $output .=  $stash->get('tokentype');
-        $output .=  " token canceled";
         }
         
             } };
