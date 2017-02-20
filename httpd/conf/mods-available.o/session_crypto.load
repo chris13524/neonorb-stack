@@ -1,2 +1,0 @@
-# Depends: session
-LoadModule session_crypto_module /usr/local/apache2/modules/mod_session_crypto.so

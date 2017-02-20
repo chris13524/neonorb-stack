@@ -1,0 +1,13 @@
+[Unit]
+Description=Docker container monitor
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/home/neonorb-stack/docker-status.sh
+ExecStop=/usr/bin/curl https://status.neonorb.com/update_status.php --data "status=destroyed"
+
+[Install]
+WantedBy=default.target
+
+

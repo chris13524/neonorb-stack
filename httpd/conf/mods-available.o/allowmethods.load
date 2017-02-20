@@ -1,1 +1,0 @@
-LoadModule allowmethods_module /usr/local/apache2/modules/mod_allowmethods.so

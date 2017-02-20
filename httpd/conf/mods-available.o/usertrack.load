@@ -1,1 +1,0 @@
-LoadModule usertrack_module /usr/local/apache2/modules/mod_usertrack.so

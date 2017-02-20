@@ -1,99 +1,123 @@
 version: '2'
 services:
 
-# MariaDB, Database depended on by all services.
+  # database to store stuffs
   database:
-#    restart: unless-stopped
-    image: mariadb:10.1
+    restart: unless-stopped
+    image: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=neonorb
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes # root should never be used to access the database, the individual user accounts should be used instead
     volumes:
-      - /data/database:/var/lib/mysql/:rw
+      - ${DATA_DIR}/database:/var/lib/mysql/:rw # the database files (duh!)
 
-# phpMyAdmin for database administration.
-  phpmyadmin:
-#    restart: unless-stopped
-    image: phpmyadmin/phpmyadmin:latest
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=database
-      - PMA_USER=root
-      - PMA_PASSWORD=neonorb
-    depends_on:
-      - database
-    links:
-      - database:database
-
-# Bugzilla
-  bugzilla:
-#    restart: unless-stopped
-    image: neonorb/bugzilla:latest
-    volumes:
-      - ./bugzilla/localconfig:/var/www/html/localconfig:rw
-      - /data/bugzilla/:/var/www/html/data:rw
-    depends_on:
-      - database
-    links:
-      - database:database
-
-# Chris's weird choice of web stack - Tomcat.
-  tomcat:
-#    restart: unless-stopped
-    image: tomcat:8.5.3-jre8
-    volumes:
-      - ./tomcat/conf/:/usr/local/tomcat/conf/:ro
-      - /data/tomcat/webapps/:/usr/local/tomcat/webapps/:rw
-      - ./tomcat/website-config.yml:/website-config.yml:ro
-      - /data/tomcat/clientportal/:/clientportal/:ro
-    depends_on:
-      - database
-    links:
-      - database:database
-    ports:
-      - 6787:6787
-
-# HTTP portion to proxy and serve Tomcat.
-  httpd:
-#    restart: unless-stopped
+  # proxies to all other services
+  exposer:
+    restart: unless-stopped
     image: httpd:2.4
     environment:
-      - DOMAIN_NAME=new.neonorb.com
-      - PROXY_ERROR_MESSAGE="neonorb.com is currently down, please wait a minute or two and try again. If you are still having troubles, contact the webmaster at support@neonorb.com"
+      - DOMAIN_NAME=$DOMAIN_NAME
     volumes:
-      - /data/httpd/:/usr/local/apache2/htdocs/:ro
-      - ./httpd/conf/:/usr/local/apache2/conf/:ro
-      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+      - ${DATA_DIR}/exposer/:/usr/local/apache2/htdocs/:ro # error documents and websites I'm too lazy to setup their own containers for
+      - ./exposer/:/usr/local/apache2/conf/:ro # global configuration, site configuration, and module configurations
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro # SSL keys and things
     ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      - phpmyadmin
-      - bugzilla
-      - tomcat
-    links:
-      - tomcat:tomcat
-      - phpmyadmin:phpmyadmin
-      - bugzilla:bugzilla
+      - "80:80" # all access on this port should be redirected to HTTPS
+      - "443:443" # HTTPS encrypted stuffs
 
-# Mail
-  mail:
-#    restart: unless-stopped
-#    build: ../docker-mail
-    image: neonorb/mail:latest
-    environment:
-      - DOMAIN_NAME=new.neonorb.com
-      - DB_HOST=database
-      - DB_NAME=mail
-      - DB_USER=mail
-      - DB_PASS=4_n*%fklL+L+J%Rf:8xI-.-e.=18XdwrM|*F=k=pg!nnbo3c+K4S:_vH~Tz+^|J^bRZ%c-0!6-!^*TLmz8Y%5Sa!4c4:l+O+f;PX
-      - POSTMASTER_ADDRESS=neonorb@new.neonorb.com
+  # neonorb.com website
+  neonorb.com:
+    restart: unless-stopped
+    image: neonorb/neonorb.com
     volumes:
-      - /etc/letsencrypt/:/etc/letsencrypt/:ro
-      - /data/mail/:/home/mailboxes/:rw
-    ports:
-      - 587:587
-      - 993:993
+      - ${DATA_DIR}/neonorb.com/website-config.yml:/website-config.yml:ro # website configuration such as database passwords, email passwords, etc.
+      - ${DATA_DIR}/clientportal/:/clientportal/:ro # storage for application updates/downloads
     depends_on:
       - database
-    links:
-      - database:database
+      - exposer
+
+  # phpMyAdmin for database administration.
+  dbadmin.neonorb.com:
+    restart: unless-stopped
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      - PMA_HOST=database # specifies the host of the database
+    depends_on:
+      - database
+      - exposer
+
+  # Bugzilla for bug management
+  bugs.neonorb.com:
+    restart: unless-stopped
+    image: neonorb/bugzilla
+    volumes:
+      - ${DATA_DIR}/bugs.neonorb.com/localconfig:/var/www/html/localconfig:rw # configuration including database keys
+      - ${DATA_DIR}/bugs.neonorb.com/data/:/var/www/html/data/:rw # assets, attachments, extensions, templates, parameters (config, email & database keys)
+    depends_on:
+      - database
+      - exposer
+
+  # MediaWiki for documentation
+  wiki.neonorb.com:
+    restart: unless-stopped
+    image: benhutchins/mediawiki:latest
+    environment: # these values aren't actually used, but they're required by the startup script
+      - MEDIAWIKI_SITE_SERVER=<server>
+      - MEDIAWIKI_DB_TYPE=<type>
+      - MEDIAWIKI_DB_HOST=<host>
+      - MEDIAWIKI_DB_NAME=<name>
+      - MEDIAWIKI_DB_USER=<user>
+      - MEDIAWIKI_DB_PASSWORD=<password>
+    volumes:
+      - ${DATA_DIR}/wiki.neonorb.com/:/data:rw # configuration, images, and extensions
+    depends_on:
+      - database
+      - exposer
+
+  # TRS's website
+  theredstonescientist.com:
+    restart: unless-stopped
+    image: neonorb/apache-php
+    environment:
+      - ALLOW_OVERRIDE=true # allows .htaccess files
+    volumes:
+      - ${DATA_DIR}/theredstonescientist.com/www/:/app/:rw # the WWW data
+    depends_on:
+      - database
+      - exposer
+
+  # Chris's blog
+  blog.hichris.com:
+    restart: unless-stopped
+    image: neonorb/apache-php
+    environment:
+      - ALLOW_OVERRIDE=true # allows .htaccess files
+    volumes:
+      - ${DATA_DIR}/blog.hichris.com/www/:/app/:rw # the WWW data
+    depends_on:
+      - database
+      - exposer
+
+  # file access for users without SSH access (currently none)
+  # see this for how to manage users: https://hub.docker.com/r/stilliard/pure-ftpd/
+  ftp:
+    restart: unless-stopped
+    image: stilliard/pure-ftpd:hardened
+    environment:
+      - PUBLICHOST=localhost # something about PASV support?
+    volumes:
+      - ${DATA_DIR}/ftp/user/:/etc/pure-ftpd/passwd/:rw # users
+      - ${DATA_DIR}/ftp/data/:/home/ftpdata/:rw # data
+      - /etc/letsencrypt/live/neonorb.com/privkey.pem:/etc/ssl/private/pure-ftpd.pem:ro # for FTPS
+    ports:
+      - "20:20"
+      - "21:21"
+      - "30000-30009:30000-30009"
+
+  # Portainer to manage Docker containers
+  portainer.neonorb.com:
+    restart: unless-stopped
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw # connection to the Docker deamon
+      - ${DATA_DIR}/portainer.neonorb.com/:/data/:rw # arbitrary data that I have no clue what it does
+
