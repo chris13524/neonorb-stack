@@ -119,5 +119,5 @@ services:
     image: portainer/portainer
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw # connection to the Docker deamon
-      - ${DATA_DIR}/portainer.neonorb.com/:/data/:rw # arbitrary data that I have no clue what it does
+      - ${DATA_DIR}/portainer.neonorb.com/:/data/:rw # configs, admin password, etc.
 
